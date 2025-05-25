@@ -1,0 +1,92 @@
+body {
+    background-color: #e9f1f7; /* Nền nhạt xanh dương */
+    font-family: 'Arial', sans-serif;
+}
+.container-booking {
+    max-width: 800px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+h2 {
+    color: #1a3c6e; /* Xanh đậm cho tiêu đề */
+    font-weight: 700;
+}
+.tab-btn {
+    padding: 12px 25px;
+    border: none;
+    background-color: #d1e0f0; 
+    color: #1a3c6e;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.tab-btn.active {
+    background-color: #2563eb; 
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 -2px 10px rgba(37, 99, 235, 0.3); 
+}
+.tab-btn:hover {
+    background-color: #a3bffa; 
+}
+.form-label {
+    font-weight: 500;
+    color: #1a3c6e;
+}
+.form-control {
+    border-radius: 10px;
+    border-color: #b0c4de; 
+    box-shadow: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-control:focus {
+    border-color: #1a3c6e;
+    box-shadow: 0 0 5px rgba(26, 60, 110, 0.3);
+}
+.input-group-text {
+    background-color: #d1e0f0;
+    border: none;
+    border-radius: 10px 0 0 10px;
+    color: #1a3c6e;
+}
+.btn-primary {
+    background-color: #ff6f61; 
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn-primary:hover {
+    background-color: #e65b50; 
+    transform: translateY(-2px);
+}
+.add-flight-btn, .remove-flight-btn {
+    color: #ff6f61;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 15px;
+    border: 2px solid #ff6f61;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+.add-flight-btn:hover, .remove-flight-btn:hover {
+    background-color: #ff6f61;
+    color: #fff;
+    text-decoration: none;
+}
+.tab-content {
+    padding: 20px;
+    border: 1px solid #b0c4de;
+    border-radius: 0 10px 10px 10px;
+    background-color: #f8fafd; 
+}
+.flight-row {
+    margin-bottom: 15px;
+    border: 1px solid #b0c4de;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
