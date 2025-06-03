@@ -20,12 +20,13 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
-    public Long addPermission(PermissionEntity permission) {
+    public boolean addPermission(PermissionEntity permission) {
         Optional<PermissionEntity> entity = dao.findByID(permission.getPermissionId());
         if (!entity.isEmpty()) {
-            return null;
+            return false;
         }
-        return dao.insert(permission);
+        dao.insert(permission);
+        return true;
     }
 
     @Override
@@ -47,5 +48,15 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     public boolean deletePermissionById(Long id) {
         return dao.deleteByID(id);
+    }
+
+    @Override
+    public List<String> getPermissionOfRole(String roleName) {
+        return dao.findPermissionOfRole(roleName);
+    }
+
+    @Override
+    public boolean deletePermissionOfRole(String roleName, String permissionName) {
+        return dao.deletePermissionOfRole(roleName, permissionName);
     }
 }

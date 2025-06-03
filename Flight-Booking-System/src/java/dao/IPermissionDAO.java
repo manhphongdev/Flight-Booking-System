@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.List;
 import java.util.Optional;
 import model.PermissionEntity;
 
@@ -7,21 +8,28 @@ import model.PermissionEntity;
  *
  * @author manhphong
  */
-public interface IPermissionDAO extends IBaseDAO<PermissionEntity>{
+public interface IPermissionDAO extends IBaseDAO<PermissionEntity> {
 
     /**
      * update name of permission
+     *
      * @param entity
-     * @param newEntity 
+     * @param newEntity
      */
     public boolean updateByPermissionName(PermissionEntity entity, PermissionEntity newEntity);
-    
+
     /**
      * check a permission is exists in database
+     *
      * @param permissionName
-     * @return 
+     * @return
      */
     public boolean isPermissionNameExists(String permissionName);
-    
+
     Optional<PermissionEntity> findByName(String permissionName);
+
+    public List<String> findPermissionOfRole(String roleName);
+    
+    boolean deletePermissionOfRole(String roleName, String permissionName);
+
 }

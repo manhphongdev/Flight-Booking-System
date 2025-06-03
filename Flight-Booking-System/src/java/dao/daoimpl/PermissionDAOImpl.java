@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -81,14 +82,14 @@ public class PermissionDAOImpl implements IPermissionDAO {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     entity.setPermissionId(rs.getLong(1));
+                    return entity.getPermissionId();
                 }
             }
             conn.commit();
-            return entity.getPermissionId();
         } catch (SQLException e) {
             if (conn != null) {
                 try {
-                    conn.rollback(); 
+                    conn.rollback();
                 } catch (SQLException rollbackEx) {
                     System.err.println("Rollback failed: " + rollbackEx.getMessage());
                 }
@@ -103,7 +104,6 @@ public class PermissionDAOImpl implements IPermissionDAO {
                     System.err.println("Error closing connection: " + e.getMessage());
                 }
             }
-
         }
         return null;
     }
@@ -190,4 +190,52 @@ public class PermissionDAOImpl implements IPermissionDAO {
         return Optional.empty();
     }
 
+    @Override
+    public List<String> findPermissionOfRole(String roleName) {
+        List<String> list = new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("select p.permission_name from Permission p ");
+        sb.append("join Role_Has_Permission rp on rp.permission_id = p.permission_id ");
+        sb.append("join Role r on r.role_id = rp.role_id ");
+        sb.append("where role_name = ?");
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sb.toString())) {
+            ps.setString(1, roleName);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(rs.getString("permission_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static void main(String[] args) {
+        PermissionDAOImpl dao = new PermissionDAOImpl();
+
+        dao.deletePermissionOfRole("ADMIN", "create_user");
+    }
+
+    @Override
+    public boolean deletePermissionOfRole(String roleName, String permissionName) {
+
+        StringBuilder sb = new StringBuilder("Delete from Role_Has_Permission ");
+        sb.append("where role_id = (select role_id from Role where role_name = ? ) ");
+        sb.append("and permission_id = (select permission_id from Permission where permission_name = ?)");
+        try(Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sb.toString())) {
+            ps.setString(1, roleName);
+            ps.setString(2, permissionName);
+            
+            if(ps.executeUpdate() >0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
 }

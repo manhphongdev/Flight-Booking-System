@@ -98,6 +98,97 @@
                 background-color: #c82333;
                 border-color: #c82333;
             }
+
+            /* Container cho tiêu đề và form tìm kiếm */
+            .search-header-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+
+            /* Tiêu đề */
+            .search-header-title {
+                margin: 0;
+                font-size: 24px;
+                font-weight: 600;
+                color: #333;
+            }
+
+            /* Form tìm kiếm */
+            .custom-search-form {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex: 1;
+                max-width: 400px;
+            }
+
+            /* Input tìm kiếm */
+            .custom-search-input {
+                flex: 1;
+                padding: 10px 15px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 16px;
+                outline: none;
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .custom-search-input:focus {
+                border-color: #28a745;
+                box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+            }
+
+            /* Nút tìm kiếm */
+            .custom-search-button {
+                padding: 10px 20px;
+                background-color: #138496;
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                font-weight: 500;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .custom-search-button:hover {
+                background-color: #218838;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            .custom-search-button:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Responsive cho màn hình nhỏ */
+            @media (max-width: 768px) {
+                .search-header-container {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 15px;
+                }
+
+                .custom-search-form {
+                    width: 100%;
+                    max-width: none;
+                }
+
+                .custom-search-button {
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 14px;
+                }
+            }
+
         </style>
     </head>
     <body>
@@ -249,7 +340,7 @@
                                 <td><c:out value="${role.description}"></c:out> </td>
                                     <td>
                                         <!-- Button edit role -->
-                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRoleModal-${role.roleName}">
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRoleModal-${role.roleId}">
                                         <i class="bi bi-pencil"></i> Edit
                                     </button>
 
@@ -287,7 +378,7 @@
                                     </div>
 
                                     <!-- Form edit -->
-                                    <div class="modal fade" id="editRoleModal-${role.roleName}" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="editRoleModal-${role.roleId}" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -315,7 +406,7 @@
                                                     <c:if test="${not empty updateFaild}">
                                                         <script>
                                                             document.addEventListener('DOMContentLoaded', function () {
-                                                                var editRole = new bootstrap.Modal(document.getElementById('editRoleModal-${role.roleName}'));
+                                                                var editRole = new bootstrap.Modal(document.getElementById('#editRoleModal-${role.roleId}'));
                                                                 editRole.show();
                                                             });
                                                         </script>
@@ -484,38 +575,127 @@
             </div>
 
 
-            
-
-
-
-
-
-
-
-
-
-
-            <!-- Role-Permission Mapping Table -->
+            <!-- Role-Permission Mapping Section -->
             <div class="col-12 mt-4">
-                <h3>Role-Permission Mapping</h3>
+                <div class="row mb-3">
+                    <div class="col">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRolePermissionModal">
+                            <i class="bi bi-plus-circle me-2"></i> Add Role-Permission Mapping
+                        </button>
+                    </div>
+                </div>
+                <div class="search-header-container">
+                    <h3 class="search-header-title">Role Has Permission</h3>
+                    <form method="GET" action="/flights/admin/access-manager" class="custom-search-form" >
+                        <input type="hidden" name="action" value="findByRoleName">
+                        <input type="search" id="custom-search-input" name="roleName" placeholder="Search by role" class="custom-search-input">
+                        <button type="submit" class="custom-search-button" ><i class="bi bi-search me-2"></i>Search</button>
+                    </form>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Role Name</th>
-                            <th>Permissions</th>
+                            <th style="width: 24vw">Role</th>
+                            <th>Role Has Permission</th>
+                            <th style="width: 15vw">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Admin</td>
-                            <td>View Users, Edit Users, Manage Bookings</td>
-                        </tr>
-                        <tr>
-                            <td>Staff</td>
-                            <td>View Users, Manage Bookings</td>
-                        </tr>
+                        <c:forEach var="permissionName" items="${permissionNames}">
+                            <tr>
+                                <td>${param.roleName}</td>
+                                <td><c:out value="${permissionName}"></c:out></td>
+                                    <td>
+
+                                    <!-- Button delete role -->
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal-${permissionName}-${param.roleName}">
+                                        Delete
+                                    </button>
+
+                                    <!-- form modal confirm delete -->
+                                    <div class="form-confirm-delete">
+                                        <form method="POST" action="/flights/admin/access-manager">
+                                            <input type="hidden" name="action" value="deletePermissionOfRole">
+                                            <input type="hidden" name="permissionNameDelete" value="${permissionName}">
+                                            <input type="hidden" name="roleNameDelete" value="${param.roleName}">
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="deleteConfirmModal-${permissionName}-${param.roleName}" tabindex="-1" aria-labelledby="deleteConfirmModal" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="deleteConfirmModal">Confirm</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                            <button type="submit" class="btn btn-primary">Yes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Add Role-Permission Mapping Modal -->
+            <div class="modal fade" id="addRolePermissionModal" tabindex="-1" aria-labelledby="addRolePermissionModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addRolePermissionModalLabel">Add Role-Permission Mapping</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/flights/admin/access-manager" method="POST">
+                                <input type="hidden" name="action" value="addRolePermission">
+
+                                <!-- Hiển thị lỗi nếu có -->
+                                <c:if test="${not empty addMappingFailed}">
+                                    <div class="alert alert-danger">${addMappingFailed}</div>
+                                </c:if>
+
+                                <!-- Chọn Role -->
+                                <div class="mb-3">
+                                    <label for="roleName" class="form-label">Role Name</label>
+                                    <select class="form-control" id="roleName" name="roleName" required>
+                                        <c:forEach var="role" items="${roles}">
+                                            <option value="${role.roleName}">${role.roleName}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <!-- Chọn Permission -->
+                                <div class="mb-3 container-fluid">
+                                    <div class="row">
+                                        <label for="permissionName" class="form-label">Permission Name</label> <br>
+                                        <c:forEach var="permission" items="${permissions}">
+                                            <label class="col-md-6">
+                                                <input type="checkbox" name="permission" value="${permission.permissonName}"> 
+                                                ${permission.permissonName}
+                                            </label><br>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Add Mapping</button>
+                            </form>
+                            <c:if test="${not empty addMappingFailed}">
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var addRolePermissionModal = new bootstrap.Modal(document.getElementById('addRolePermissionModal'));
+                                        addRolePermissionModal.show();
+                                    });
+                                </script>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Bootstrap JS -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -208,6 +208,15 @@
     margin-bottom: 30px;
 }
 
+.login-modal .modal-content {
+    max-width: 400px; /* Giảm chiều rộng form */
+    padding: 20px;
+}
+
+.login-modal .form-control {
+    font-size: 14px; /* Giảm kích thước chữ */
+    padding: 8px; /* Điều chỉnh khoảng cách bên trong */
+}
 .login-modal h2{
      margin-bottom: 20px;
 }

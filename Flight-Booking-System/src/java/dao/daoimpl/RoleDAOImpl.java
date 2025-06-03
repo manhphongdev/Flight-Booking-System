@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import model.PermissionEntity;
 import model.RoleEntity;
 import utils.DBContext;
 
@@ -76,36 +77,30 @@ public class RoleDAOImpl implements IRoleDAO {
                 ps.setString(2, entity.getDescription());
 
                 if (ps.executeUpdate() == 1) {
-                    try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            entity.setRoleId(rs.getLong(1));
-                        }
-                    }
+                    return ps.getGeneratedKeys().getLong(1);
                 }
             }
 
             conn.commit(); // If not error, commit 
-            return entity.getRoleId();
         } catch (SQLException e) {
             if (conn != null) {
                 try {
-                    conn.rollback(); 
+                    conn.rollback();
                 } catch (SQLException rollbackEx) {
-                    System.err.println("Rollback failed: " + rollbackEx.getMessage());
+                    rollbackEx.printStackTrace();
                 }
             }
-            System.err.println("Insert failed: " + e.getMessage());
-            return null;
         } finally {
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true); // Reset auto-commit
                     conn.close();
                 } catch (SQLException e) {
-                    System.err.println("Error closing connection: " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
+        return null;
     }
 
     @Override
@@ -180,6 +175,23 @@ public class RoleDAOImpl implements IRoleDAO {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void saveRoleHasPermission(RoleEntity get, PermissionEntity get0) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("insert into Role_Has_Permission ");
+        sb.append("values((select r.role_id from Role r where r.role_name = ?),");
+        sb.append("(select p.permission_id from Permission p where p.permission_name = ?))");
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sb.toString())) {
+            ps.setString(1, get.getRoleName());
+            ps.setString(2, get0.getPermissonName());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

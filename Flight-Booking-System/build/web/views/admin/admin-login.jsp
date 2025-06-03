@@ -105,8 +105,9 @@
 </head>
 <body>
     <div class="login-container">
-        <h2>Login Admin</h2>
-        <form action="/flights/admin/login" method="post">
+        <h2>Login Dashboard</h2>
+        <form action="/flights/auth/login" method="post">
+            <input type="hidden" name="loginType" value="dashboard">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>

@@ -1,6 +1,8 @@
 package dao;
 
+import java.util.List;
 import java.util.Optional;
+import model.PermissionEntity;
 import model.RoleEntity;
 
 /**
@@ -20,4 +22,7 @@ public interface IRoleDAO  extends IBaseDAO<RoleEntity>{
      * @return T object if id exist else return null
      */
     Optional<RoleEntity> findByName(String roleName);
+
+    public void saveRoleHasPermission(RoleEntity get, PermissionEntity get0);
+    
 }

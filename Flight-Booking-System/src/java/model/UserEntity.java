@@ -1,8 +1,6 @@
 package model;
 
-import enums.Gender;
 import enums.UserStatus;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserEntity {
@@ -27,7 +25,6 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    
     public UserEntity(Long userId, String email, String password, String firstName, String lastName, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginedAt, UserStatus status) {
         this.userId = userId;
         this.email = email;
@@ -112,4 +109,8 @@ public class UserEntity {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "UserEntity{" + "userId=" + userId + ", email=" + email + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", lastLoginedAt=" + lastLoginedAt + ", status=" + status + '}';
+    }
 }

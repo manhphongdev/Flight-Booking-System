@@ -1,0 +1,43 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #1a2b4f;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.sidebar .accordion-button {
+    background-color: transparent;
+    color: #fff;
+    font-weight: 600;
+    padding: 15px 20px;
+}
+.sidebar .accordion-button::after {
+    filter: invert(1);
+}
+.sidebar .accordion-button:not(.collapsed) {
+    background-color: #17a2b8;
+    color: #fff;
+}
+.sidebar a {
+    color: #d1d4da;
+    display: block;
+    padding: 10px 30px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+.sidebar a:hover {
+    background-color: #17a2b8;
+    color: #fff;
+}
+.sidebar a.active {
+    background-color: #17a2b8;
+    color: #fff;
+}

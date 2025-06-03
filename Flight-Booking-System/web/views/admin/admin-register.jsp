@@ -146,6 +146,7 @@
         
         <!-- Manual Registration Form -->
         <form action="register" method="post">
+            <input type="hidden" name="registerType" value="dashboard">
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="firstName" class="form-label">First Name <span class="required">*</span></label>

@@ -9,11 +9,15 @@ import model.PermissionEntity;
  */
 public interface IPermissionService {
 
-    Long addPermission(PermissionEntity permission);
+    boolean addPermission(PermissionEntity permission);
 
     public boolean updateByPermissionName(PermissionEntity entity, String permission);
 
     public List<PermissionEntity> getAllPermission();
 
     public boolean deletePermissionById(Long id);
+    
+    List<String> getPermissionOfRole(String roleName);
+    
+    boolean deletePermissionOfRole(String roleName, String permissionName);
 }

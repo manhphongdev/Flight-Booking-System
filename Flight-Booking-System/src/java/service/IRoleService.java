@@ -1,4 +1,3 @@
-
 package service;
 
 import java.util.List;
@@ -10,11 +9,13 @@ import model.RoleEntity;
  */
 public interface IRoleService {
     
-    public Long addRole(RoleEntity role);
+    public boolean addRole(RoleEntity role);
 
     public boolean updateByRoleName(RoleEntity entity, String role);
 
     public List<RoleEntity> getAllRole();
 
     public boolean deleteRoleById(Long id);
+    
+    public boolean addRoleHasPermission(String roleName, String permission);
 }

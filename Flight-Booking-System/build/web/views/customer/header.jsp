@@ -7,19 +7,26 @@
         <title>Header</title>
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <link rel="stylesheet" href="../resource/css/header.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/views/resource/css/header.css"/>
+        <style>
+            .error{
+                color: red;
+                text-align: start;
+                padding: 5px;
+            }
+        </style>
     </head>
     <body>
 
         <header class="main-header d-flex align-items-center justify-content-between mb-4 flex-wrap">
             <div class="logo-brand d-flex align-items-center gap-2">
-                <img style="width: 90px; height: auto;" src="../resource/image/logo.png" alt="Logo">
-                <a href="home.jsp" class="brand-title">FlightTicket</a>
+                <img style="width: 90px; height: auto;" src="${pageContext.request.contextPath}/views/resource/image/logo.png" alt="Logo">
+                <a href="${pageContext.request.contextPath}/home" class="brand-title">FlightTicket</a>
             </div>
             <nav class="main-nav d-flex align-items-center flex-wrap">
-                <a href="home.jsp">Trang chủ</a>
+                <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
                 <a href="#">Khuyến mãi</a>
-                <a href="booking.jsp" class="active">Tìm chuyến bay</a>
+                <a href="${pageContext.request.contextPath}/booking.jsp" class="active">Tìm chuyến bay</a>
                 <a href="#">Đặt chỗ của tôi</a>
             </nav>
             <div class="d-flex align-items-center gap-2 mt-2 mt-md-0 account-group">
@@ -67,57 +74,42 @@
                 <div class="modal-content">
                     <div class="modal-body text-center">
                         <h2>Đăng ký</h2>
-                        <form method="POST" action="register" id="registerForm">
+                        <form method="POST" action="${pageContext.request.contextPath}/auth/register" id="registerForm">
+
                             <div class="row mb-4">
                                 <div class="col-md-6 ">
                                     <input type="text" id="lastName" class="form-control form-control-lg"
                                            placeholder="Họ" name="lastName" value="${param.lastName}" required/>
-                                    <c:if test="${not empty errors.lastName}">
-                                        <p class="error">${errors.lastName}</p>
-                                    </c:if>
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" id="firstName" class="form-control form-control-lg"
                                            placeholder="Tên" name="firstName" value="${param.firstName}" required/>
-                                    <c:if test="${not empty errors.firstName}">
-                                        <p class="error">${errors.firstName}</p>
-                                    </c:if>
                                 </div>
                             </div>
                             <div class="form-outline mb-4 mt-4">
                                 <input type="email" id="email" class="form-control form-control-lg"
                                        placeholder="Vui lòng nhập email" name="email" value="${param.email}" required/>
-                                <c:if test="${not empty errors.email}">
-                                    <p class="error">${errors.email}</p>
+                                <c:if test="${not empty errorRegister}">
+                                    <p class="error">${errorRegister}</p>
                                 </c:if>
+
                             </div>
                             <div class="form-outline mb-4">
-                                <input type="password" id="password" class="form-control form-control-lg"
+                                <input type="password" minlength="6" maxlength="100" id="password" class="form-control form-control-lg"
                                        placeholder="Vui lòng nhập mật khẩu" name="password" required onkeyup="checkPassword()"/>
-                                
-                                <c:if test="${not empty errors.password}">
-                                    <p class="error">${errors.password}</p>
+                                <c:if test="${not empty errorPassword}">
+                                    <p class="error">${errorPassword}</p>
                                 </c:if>
-                                    
                             </div>
                             <div class="form-outline mb-4">
                                 <input type="password" id="rePassword" class="form-control form-control-lg"
                                        placeholder="Xác nhận mật khẩu" name="rePassword" required onkeyup="checkPassword()"/>
                                 <p class="error" id="errorPassword"></p>
-
                                 <c:if test="${not empty errors.rePassword}">
                                     <p class="error">${errors.rePassword}</p>
                                 </c:if>
-
                             </div>
                             <button type="submit" class="btn btn-primary btn-block mb-3">Đăng ký</button>
-                            <div class="register-divider"></div>
-                            <p class="google-note">Nếu bạn đã có tài khoản Google</p>
-                            <a href="#" class="btn-google">
-                                <img src="../resource/image/images.jpg" alt="Google" class="google-icon">
-                                Đăng ký với Google
-                            </a>
-
                         </form>
                     </div>
                 </div>
@@ -134,7 +126,7 @@
                 var errorText = document.getElementById("errorPassword");
 
                 if (!password || !rePassword) {
-                    errorText.innerHTML = ""; // Không hiển thị lỗi nếu chưa nhập đủ
+                    errorText.innerHTML = "";
                     return;
                 }
 
@@ -148,7 +140,7 @@
         </script>
 
         <!-- Mở modal nếu có lỗi -->
-        <c:if test="${not empty errors}">
+        <c:if test="${not empty errorRegister}">
             <script>
                 const modal = new bootstrap.Modal(document.getElementById('registerModal'));
                 modal.show();
@@ -163,7 +155,11 @@
                 <div class="modal-content">
                     <div class="modal-body text-center">
                         <h2>Đăng nhập</h2>
-                        <form method="POST" action="Login">
+                        <c:if test="${not empty errorLogin}">
+                            <p style="color: red">${errorLogin}</p>
+                        </c:if>
+                        <form action="${pageContext.request.contextPath}/auth/login" method="post">
+                            <input type="hidden" name="loginType" value="customer">
                             <div class="form-outline mb-4 mt-2">
                                 <input type="email" placeholder="Email" id="typeEmailX-2"
                                        class="form-control form-control-lg" name="email" />
@@ -174,16 +170,18 @@
                             </div>
                             <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
                             <div class="register-divider"></div>
-                            <p class="google-note mb-1">Hoặc</p>
-                            <a href="#" class="btn-google">
-                                <img src="../resource/image/images.jpg" alt="Google" class="google-icon">
-                                Đăng nhập với Google
-                            </a>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Mở modal nếu có lỗi -->
+        <c:if test="${not empty errorLogin}">
+            <script>
+                const modal = new bootstrap.Modal(document.getElementById('loginModal'));
+                modal.show();
+            </script>
+        </c:if>
     </body>
 </html>

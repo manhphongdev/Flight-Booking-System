@@ -7,13 +7,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.PermissionEntity;
 import model.RoleEntity;
 import service.IPermissionService;
 import service.IRoleService;
 import service.serviceimpl.PermissionServiceImpl;
-import service.serviceimpl.RoleSerrviceImpl;
+import service.serviceimpl.RoleServiceImpl;
 import utils.ValidatorUtils;
 
 /**
@@ -28,7 +29,7 @@ public class RoleAndPermissionController extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(RoleAndPermissionController.class.getName());
 
     public RoleAndPermissionController() {
-        this.rService = new RoleSerrviceImpl();
+        this.rService = new RoleServiceImpl();
         this.pService = new PermissionServiceImpl();
     }
 
@@ -52,6 +53,7 @@ public class RoleAndPermissionController extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getAllRole(req, resp);
         getAllPermission(req, resp);
+        getPermissionOfRole(req, resp);
         req.getRequestDispatcher("/views/admin/admin_roles_permissions.jsp").forward(req, resp);
     }
 
@@ -61,42 +63,50 @@ public class RoleAndPermissionController extends HttpServlet {
         String action = req.getParameter("action");
 
         switch (action) {
-            case "addRole" -> addRole(req, resp);
-            case "deleteRole" -> deleteRole(req, resp);
-            case "updateRole" -> updateRole(req, resp);
-            case "addPermission" -> addPermission(req, resp);
-            case "deletePermission" -> deletePermission(req, resp);
-            case "updatePermission" -> updatePermission(req, resp);
+            case "addRole" ->
+                addRole(req, resp);
+            case "deleteRole" ->
+                deleteRole(req, resp);
+            case "updateRole" ->
+                updateRole(req, resp);
+            case "addPermission" ->
+                addPermission(req, resp);
+            case "deletePermission" ->
+                deletePermission(req, resp);
+            case "updatePermission" ->
+                updatePermission(req, resp);
+            case "addRolePermission" ->
+                addRoleHasPermission(req, resp);
+            case "deletePermissionOfRole" ->
+                deletePermissionOfRole(req, resp);
         }
 
         if (req.getAttribute("addRoleMsg") != null
-                || req.getAttribute("updateFaild") != null 
-                || req.getAttribute("addPermissionFailed")!=null
-                || req.getAttribute("updatePermissionFaield") !=null) {
+                || req.getAttribute("updateFaild") != null
+                || req.getAttribute("addPermissionFailed") != null
+                || req.getAttribute("updatePermissionFaield") != null) {
             getAllRole(req, resp);
             getAllPermission(req, resp);
             req.getRequestDispatcher("/views/admin/admin_roles_permissions.jsp").forward(req, resp);
             return;
         }
         resp.sendRedirect("/flights/admin/access-manager");
-
     }
 
     private void addRole(HttpServletRequest req, HttpServletResponse resp) {
         String roleName = req.getParameter("roleName").toUpperCase();
         String description = req.getParameter("description").toUpperCase();
 
-        if (ValidatorUtils.isStringEmpty(roleName.trim())
-                || ValidatorUtils.isStringEmpty(description.trim())) {
+        if (ValidatorUtils.isStringEmpty(roleName)
+                || ValidatorUtils.isStringEmpty(description)) {
             LOG.warning("input is empty");
+            throw new IllegalArgumentException("Input is empty!");
         }
 
-        Long id = rService.addRole(new RoleEntity(roleName, description));
-        String addRoleMsg = "";
-        if (id == null) {
-            addRoleMsg = roleName + " is exist";
+        boolean inserted = rService.addRole(new RoleEntity(roleName.trim(), description.trim()));
+        if (!inserted) {
+            String addRoleMsg = roleName + " is exist";
             req.setAttribute("addRoleMsg", addRoleMsg);
-            req.setAttribute("openAddRoleModal", "addRoleModal");
         }
     }
 
@@ -125,57 +135,54 @@ public class RoleAndPermissionController extends HttpServlet {
         String roleDelete = req.getParameter("roleDelete");
 
         try {
-            Long id = Long.parseLong(roleDelete);
+            Long id = Long.valueOf(roleDelete);
             rService.deleteRoleById(id);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            throw new NumberFormatException("Invalid number format!");
         }
     }
-    
-    private void getAllPermission(HttpServletRequest req, HttpServletResponse res){
-        
+
+    private void getAllPermission(HttpServletRequest req, HttpServletResponse res) {
+
         List<PermissionEntity> permissions = pService.getAllPermission();
         req.setAttribute("permissions", permissions);
     }
-    
-    private void addPermission(HttpServletRequest req, HttpServletResponse res){
-        
+
+    private void addPermission(HttpServletRequest req, HttpServletResponse res) {
         String permissionName = req.getParameter("permissionName").trim();
         String description = req.getParameter("permissionDescription").trim();
-        
-        if(ValidatorUtils.isStringEmpty(permissionName) || ValidatorUtils.isStringEmpty(description)){
+
+        if (ValidatorUtils.isStringEmpty(permissionName) || ValidatorUtils.isStringEmpty(description)) {
             LOG.warning("Input permission is empty");
         }
-        
-        Long id = pService.addPermission(new PermissionEntity(permissionName, description));
-        
-        if(id == null){
+
+        boolean inserted = pService.addPermission(new PermissionEntity(permissionName, description));
+
+        if (!inserted) {
             String msg = permissionName + " is exist";
             req.setAttribute("addPermissionFailed", msg);
-        }
-        else{
-            LOG.info("Permission " + permissionName + " added");
+        } else {
+            LOG.log(Level.INFO, "Permission {0} added", permissionName);
         }
     }
-    
-    public void deletePermission(HttpServletRequest req, HttpServletResponse res){
+
+    public void deletePermission(HttpServletRequest req, HttpServletResponse res) {
         String permissionDelete = req.getParameter("permissionDelete");
-        
+
         try {
-            Long id = Long.parseLong(permissionDelete);
+            Long id = Long.valueOf(permissionDelete);
             pService.deletePermissionById(id);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            throw new NumberFormatException("Invalid format!");
         }
     }
-    
-    public void updatePermission(HttpServletRequest req, HttpServletResponse res){
-        
+
+    public void updatePermission(HttpServletRequest req, HttpServletResponse res) {
+
         String permission = req.getParameter("permissionNameEdit");
         String newPermissionName = req.getParameter("newPermissionName");
         String newPermissionDescription = req.getParameter("newPermissionDescription");
-        
-        
+
         if (newPermissionName != null && newPermissionDescription != null) {
             boolean f = pService.updateByPermissionName(new PermissionEntity(
                     newPermissionName.trim().toLowerCase(),
@@ -183,6 +190,38 @@ public class RoleAndPermissionController extends HttpServlet {
             if (f == false) {
                 req.setAttribute("updatePermissionFaield", "Name of permission is exist");
             }
+            LOG.log(Level.INFO, "Permission updated: {0}", permission);
+        }
+    }
+
+    public void addRoleHasPermission(HttpServletRequest req, HttpServletResponse res) {
+        String roleName = req.getParameter("roleName");
+        String[] permission = req.getParameterValues("permission");
+
+        for (String permission1 : permission) {
+            rService.addRoleHasPermission(roleName, permission1);
+        }
+
+    }
+
+    public void getPermissionOfRole(HttpServletRequest req, HttpServletResponse res) {
+        String roleName = req.getParameter("roleName");
+
+        LOG.log(Level.INFO, "ROLE: {0}", roleName);
+        List<String> permissionNames = pService.getPermissionOfRole(roleName);
+
+        req.setAttribute("permissionNames", permissionNames);
+    }
+
+    public void deletePermissionOfRole(HttpServletRequest req, HttpServletResponse res) {
+        String roleName = req.getParameter("roleNameDelete");
+        String permissionName = req.getParameter("permissionNameDelete");
+
+        boolean isDeleted = pService.deletePermissionOfRole(roleName, permissionName);
+        if (isDeleted == false) {
+            LOG.log(Level.WARNING, "Delete failed: {0} {1}", new Object[]{roleName, permissionName});
+        } else {
+            LOG.log(Level.INFO, "{0}Delete permission of role successfull, role: {1} ", new Object[]{permissionName, roleName});
         }
     }
 }

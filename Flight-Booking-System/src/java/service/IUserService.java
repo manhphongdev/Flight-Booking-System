@@ -1,4 +1,3 @@
-
 package service;
 
 import model.UserEntity;
@@ -9,9 +8,10 @@ import model.UserEntity;
  */
 public interface IUserService {
 
-    Long register(UserEntity user);
+    boolean register(UserEntity user);
     
-    boolean loginAdmin(String email, String password);
+    UserEntity login(String email, String password);
     
+    String getUserRole(UserEntity user);
     
 }
