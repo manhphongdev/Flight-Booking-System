@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.logging.Logger;
-import model.UserEntity;
-import service.IUserService;
+import model.User;
+import service.interfaces.IUserService;
 import service.serviceimpl.UserServiceImpl;
 import utils.ResourseMSG;
 
@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
         String loginType = req.getParameter("loginType");
         try {
-            UserEntity user = uService.login(email, password);
+            User user = uService.login(email, password);
             String role = uService.getUserRole(user);
 
             HttpSession session = req.getSession();

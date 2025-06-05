@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import model.PermissionEntity;
-import model.RoleEntity;
+import model.Permission;
+import model.Role;
 import utils.DBContext;
 
 /**
@@ -23,13 +23,13 @@ public class RoleDAOImpl implements IRoleDAO {
     public RoleDAOImpl() {
     }
 
-    public RoleEntity roleMapper(ResultSet rs) throws SQLException {
-        return new RoleEntity(rs.getLong("role_id"), rs.getString("role_name"), rs.getString("description"));
+    public Role roleMapper(ResultSet rs) throws SQLException {
+        return new Role(rs.getLong("role_id"), rs.getString("role_name"), rs.getString("description"));
     }
 
     @Override
-    public Optional<RoleEntity> findByID(Long id) {
-        RoleEntity role = null;
+    public Optional<Role> findByID(Long id) {
+        Role role = null;
         String sql = "SELECT * FROM [Role] WHERE role_id = ?";
 
         try (Connection conn = dbContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -48,8 +48,8 @@ public class RoleDAOImpl implements IRoleDAO {
     }
 
     @Override
-    public List<RoleEntity> findAll() {
-        List<RoleEntity> roles = new LinkedList<>();
+    public List<Role> findAll() {
+        List<Role> roles = new LinkedList<>();
 
         String sql = "select * from [Role]";
 
@@ -65,7 +65,7 @@ public class RoleDAOImpl implements IRoleDAO {
     }
 
     @Override
-    public Long insert(RoleEntity entity) {
+    public Long insert(Role entity) {
         String sql = "INSERT INTO [Role] (role_name, description) VALUES (?, ?)";
         Connection conn = null;
         try {
@@ -104,7 +104,7 @@ public class RoleDAOImpl implements IRoleDAO {
     }
 
     @Override
-    public boolean updateByRoleName(RoleEntity entity, RoleEntity newRole) {
+    public boolean updateByRoleName(Role entity, Role newRole) {
         StringBuilder sb = new StringBuilder();
         sb.append("update [Role] set role_name = ?, description = ? ");
         sb.append("where role_name = ?");
@@ -124,11 +124,6 @@ public class RoleDAOImpl implements IRoleDAO {
     }
 
     @Override
-    public boolean updateByID(Long id) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public boolean deleteByID(Long id) {
         String sql = "delete from [Role] where role_id = ?";
         try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -143,23 +138,23 @@ public class RoleDAOImpl implements IRoleDAO {
     }
 
     @Override
-    public List<RoleEntity> selectByCondition() {
+    public List<Role> selectByCondition() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public static void main(String[] args) {
         RoleDAOImpl dao = new RoleDAOImpl();
 
-        List<RoleEntity> lists = dao.findAll();
+        List<Role> lists = dao.findAll();
 
-        for (RoleEntity list : lists) {
+        for (Role list : lists) {
             System.out.println(list.toString());
         }
     }
 
     @Override
-    public Optional<RoleEntity> findByName(String roleName) {
-        RoleEntity role = null;
+    public Optional<Role> findByName(String roleName) {
+        Role role = null;
         String sql = "SELECT * FROM [Role] WHERE role_name = ?";
 
         try (Connection conn = dbContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -178,7 +173,7 @@ public class RoleDAOImpl implements IRoleDAO {
     }
 
     @Override
-    public void saveRoleHasPermission(RoleEntity get, PermissionEntity get0) {
+    public void saveRoleHasPermission(Role get, Permission get0) {
         StringBuilder sb = new StringBuilder();
         sb.append("insert into Role_Has_Permission ");
         sb.append("values((select r.role_id from Role r where r.role_name = ?),");
@@ -192,6 +187,11 @@ public class RoleDAOImpl implements IRoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean updateByID(Long id, Role entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

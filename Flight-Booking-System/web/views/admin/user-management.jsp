@@ -118,7 +118,7 @@
                 align-items: center;
                 gap: 10px;
                 flex: 1;
-                max-width: 600px;
+                max-width: 300px;
                 flex-wrap: wrap;
             }
             .custom-search-input {
@@ -212,7 +212,6 @@
     </head>
     <body>
         <!-- Sidebar -->
-        <c:set var="activePage" value="user-management" scope="request"/>
         <%@ include file="sidebar.jsp" %>
 
         <!-- Main Content -->
@@ -228,25 +227,49 @@
                         </button>
                     </div>
                 </div>
-                <div class="search-header-container">
-                    <h3 class="search-header-title">User List</h3>
-                    <form method="GET" action="${pageContext.request.contextPath}/admin/user-management" class="custom-search-form">
-                        <input type="hidden" name="sortBy" value="${sortBy}">
-                        <input type="hidden" name="sortOrder" value="${sortOrder}">
-                        <input type="search" name="search" placeholder="Search by email or name" class="custom-search-input" value="${search}">
-                        <select name="role" class="custom-search-input">
-                            <option value="">All Roles</option>
-                            <option value="ADMIN" ${roleFilter == 'ADMIN' ? 'selected' : ''}>Admin</option>
-                            <option value="CUSTOMER" ${roleFilter == 'CUSTOMER' ? 'selected' : ''}>Customer</option>
-                        </select>
-                        <select name="status" class="custom-search-input">
-                            <option value="">All Statuses</option>
-                            <option value="ACTIVE" ${statusFilter == 'ACTIVE' ? 'selected' : ''}>Active</option>
-                            <option value="INACTIVE" ${statusFilter == 'INACTIVE' ? 'selected' : ''}>Inactive</option>
-                        </select>
-                        <button type="submit" class="custom-search-button"><i class="bi bi-search me-2"></i>Search</button>
+
+                <div class="search-filters-container mb-4 p-3 bg-light border rounded">
+                    <form method="GET" action="${pageContext.request.contextPath}/admin/users" class="row g-3 align-items-end">
+                        <%-- Input tìm kiếm --%>
+                        <div class="col-md-6 col-lg-4">
+                            <label for="searchTermInput" class="form-label fw-semibold">Keyword</label>
+                            <input type="text" class="form-control" id="searchTermInput" name="search" placeholder="Search by email, name" value="${param.search}">
+                        </div>
+
+                        <%-- Chọn Role --%>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="roleSelectFilter" class="form-label fw-semibold">Role</label>
+                            <select class="form-select" id="roleSelectFilter" name="roleFilter">
+                                <option value="allRole">All</option>
+                                <c:if test="${not empty roles}">
+                                    <c:forEach var="role" items="${roles}">
+                                        <option value="${role.roleName}" ${param.roleFilter eq role.roleName ? 'selected' : ''}>${role.roleName}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
+                        </div>
+
+                        <%-- Sắp xếp theo (Sort By) --%>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="sortBySelectFilter" class="form-label fw-semibold">Order By</label>
+                            <select class="form-select" id="sortBySelectFilter" name="sortBy">
+                                <option value="fullNameASC" ${param.sortBy == 'fullNameASC' ? 'selected' : ''}>Name (A-Z)</option>
+                                <option value="fullNameDESC" ${param.sortBy == 'fullNameDESC' ? 'selected' : ''}>Name (Z-A)</option>
+                                <option value="emailASC" ${param.sortBy == 'emailASC' ? 'selected' : ''}>Email (A-Z)</option>
+                                <option value="emailDESC" ${param.sortBy == 'emailASC' ? 'selected' : ''}>Email (Z-A)</option>
+                            </select>
+                        </div>
+
+                        <%-- Nút Tìm kiếm --%>
+                        <div class="col-md-6 col-lg-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search me-1"></i> Search
+                            </button>
+                        </div>
                     </form>
                 </div>
+                <h3 class="search-header-title">User List</h3>
+
                 <c:if test="${not empty success}">
                     <div class="alert alert-success">${success}</div>
                 </c:if>
@@ -257,76 +280,45 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th style="width: 10%">
-                                    ID
-                                    <button class="sort-button" onclick="sortTable('id')">
-                                        <i class="bi ${sortBy == 'id' ? (sortOrder == 'ASC' ? 'bi-arrow-up' : 'bi-arrow-down') : 'bi-arrow-up-down'}"></i>
-                                    </button>
-                                </th>
-                                <th style="width: 25%">
-                                    Email
-                                    <button class="sort-button" onclick="sortTable('email')">
-                                        <i class="bi ${sortBy == 'email' ? (sortOrder == 'ASC' ? 'bi-arrow-up' : 'bi-arrow-down') : 'bi-arrow-up-down'}"></i>
-                                    </button>
-                                </th>
-                                <th style="width: 20%">
-                                    Name
-                                    <button class="sort-button" onclick="sortTable('name')">
-                                        <i class="bi ${sortBy == 'name' ? (sortOrder == 'ASC' ? 'bi-arrow-up' : 'bi-arrow-down') : 'bi-arrow-up-down'}"></i>
-                                    </button>
-                                </th>
-                                <th style="width: 15%">
-                                    Role
-                                    <button class="sort-button" onclick="sortTable('role')">
-                                        <i class="bi ${sortBy == 'role' ? (sortOrder == 'ASC' ? 'bi-arrow-up' : 'bi-arrow-down') : 'bi-arrow-up-down'}"></i>
-                                    </button>
-                                </th>
-                                <th style="width: 15%">
-                                    Status
-                                    <button class="sort-button" onclick="sortTable('status')">
-                                        <i class="bi ${sortBy == 'status' ? (sortOrder == 'ASC' ? 'bi-arrow-up' : 'bi-arrow-down') : 'bi-arrow-up-down'}"></i>
-                                    </button>
-                                </th>
-                                <th style="width: 15%">
-                                    Created At
-                                    <button class="sort-button" onclick="sortTable('createdAt')">
-                                        <i class="bi ${sortBy == 'createdAt' ? (sortOrder == 'ASC' ? 'bi-arrow-up' : 'bi-arrow-down') : 'bi-arrow-up-down'}"></i>
-                                    </button>
-                                </th>
-                                <th style="width: 15%">Action</th>
+                                <th style="width: 7%">ID</th>
+                                <th >Email</th>
+                                <th >Full Name</th>
+                                <th >Role</th>
+                                <th >Status</th>
+                                <th >Last Login</th>
+                                <th >Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="user" items="${users}">
                                 <tr>
-                                    <td><c:out value="${user.id}"/></td>
+                                    <td><c:out value="${user.userId}"/></td>
                                     <td><c:out value="${user.email}"/></td>
-                                    <td><c:out value="${user.name}"/></td>
-                                    <td><c:out value="${user.role}"/></td>
+                                    <td><c:out value="${user.lastName} ${user.firstName}"/></td>
+                                    <td><c:out value="${user.userRole}"/></td>
                                     <td><c:out value="${user.status}"/></td>
-                                    <td><c:out value="${user.createdAt}"/></td>
+                                    <td><c:out value="${user.lastLoginedAt}"/></td>
                                     <td>
-                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal-${user.id}">
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal-${user.userId}">
                                             <i class="bi bi-pencil"></i> Edit
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal-${user.id}">
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal-${user.userId}">
                                             <i class="bi bi-trash"></i> Delete
                                         </button>
-
                                         <!-- Delete Confirmation Modal -->
                                         <div class="form-confirm-delete">
-                                            <form method="POST" action="${pageContext.request.contextPath}/admin/user-management">
+                                            <form method="POST" action="${pageContext.request.contextPath}/admin/users">
                                                 <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="id" value="${user.id}">
-                                                <div class="modal fade" id="deleteConfirmModal-${user.id}" tabindex="-1" aria-labelledby="deleteConfirmModalLabel-${user.id}" aria-hidden="true">
+                                                <input type="hidden" name="idDelete" value="${user.userId}">
+                                                <div class="modal fade" id="deleteConfirmModal-${user.userId}" tabindex="-1" aria-labelledby="deleteConfirmModalLabel-${user.userId}" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h1 class="modal-title fs-5" id="deleteConfirmModalLabel-${user.id}">Confirm</h1>
+                                                                <h1 class="modal-title fs-5" id="deleteConfirmModalLabel-${user.userId}">Confirm</h1>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <div>Do you want to delete this user with ID: ${user.id}?</div>
+                                                                <div>Do you want to delete this user with ID: ${user.userId}?</div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
@@ -338,49 +330,63 @@
                                             </form>
                                         </div>
 
-                                        <!-- Edit User Modal -->
-                                        <div class="modal fade" id="editUserModal-${user.id}" tabindex="-1" aria-labelledby="editUserModalLabel-${user.id}" aria-hidden="true">
+                                        <!-- edit user -->
+                                        <div class="modal fade" id="editUserModal-${user.userId}" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="editUserModalLabel-${user.id}">Edit User</h5>
+                                                        <h5 class="modal-title" id="editUserModal-${user.userId}">Edit User</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="${pageContext.request.contextPath}/admin/user-management" method="POST">
-                                                            <input type="hidden" name="action" value="update">
-                                                            <input type="hidden" name="id" value="${user.id}">
-                                                            <c:if test="${not empty error}">
-                                                                <div class="alert alert-danger">${error}</div>
+                                                        <form action="${pageContext.request.contextPath}/admin/users"  method="POST">
+                                                            <input type="hidden" name="action" value="updateUser">
+                                                            <input type="hidden" name="userIdEdit" value="${user.userId}">
+                                                            <c:if test="${not empty errorNull }">
+                                                                <div class="alert alert-danger">${errorNull}</div>
                                                             </c:if>
                                                             <div class="mb-3">
-                                                                <label for="editEmail-${user.id}" class="form-label">Email</label>
-                                                                <input type="email" class="form-control" id="editEmail-${user.id}" name="email" value="${user.email}" readonly>
+                                                                <label for="editFirstName" class="form-label">First Name</label>
+                                                                <input type="text" class="form-control" id="editFirstName" name="newFirstName" value="${user.firstName}" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="editName-${user.id}" class="form-label">Name</label>
-                                                                <input type="text" maxlength="250" class="form-control" id="editName-${user.id}" name="name" value="${user.name}" required>
+                                                                <label for="editLastName" class="form-label">Last Name</label>
+                                                                <input type="text" class="form-control" id="editLastName" name="newLastName" value="${user.lastName}" required>
                                                             </div>
+
                                                             <div class="mb-3">
-                                                                <label for="editRole-${user.id}" class="form-label">Role</label>
-                                                                <select class="form-control" id="editRole-${user.id}" name="role" required>
-                                                                    <option value="ADMIN" ${user.role == 'ADMIN' ? 'selected' : ''}>Admin</option>
-                                                                    <option value="CUSTOMER" ${user.role == 'CUSTOMER' ? 'selected' : ''}>Customer</option>
+                                                                <label for="editRole" class="form-label">Select role</label>
+                                                                <select class="form-control" id="editRole" name="roleName" required>
+                                                                    <c:if test="${not empty roles}">
+                                                                        <c:forEach var="role" items="${roles}">
+                                                                            <option value="${role.roleName}">${role.roleName}</option>
+                                                                        </c:forEach>
+                                                                    </c:if>
                                                                 </select>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="editStatus-${user.id}" class="form-label">Status</label>
-                                                                <select class="form-control" id="editStatus-${user.id}" name="status" required>
-                                                                    <option value="ACTIVE" ${user.status == 'ACTIVE' ? 'selected' : ''}>Active</option>
-                                                                    <option value="INACTIVE" ${user.status == 'INACTIVE' ? 'selected' : ''}>Inactive</option>
+                                                                <label for="editStatus" class="form-label">Status</label>
+                                                                <select class="form-control" id="editStatus" name="status" required>
+                                                                    <option>Active</option>
+                                                                    <option value="IN_ACTIVE">Inactive</option>
                                                                 </select>
                                                             </div>
                                                             <button type="submit" class="btn btn-primary">Save Changes</button>
                                                         </form>
+
+                                                        <c:if test="${not empty errorNull}">
+                                                            <script>
+                                                                document.addEventListener('DOMContentLoaded', function () {
+                                                                    var editPermission = new bootstrap.Modal(document.getElementById('editUserModal-${user.userId}'));
+                                                                    editPermission.show();
+                                                                });
+                                                            </script>
+                                                        </c:if>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -388,16 +394,6 @@
                     </table>
                 </div>
 
-                <!-- Pagination -->
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        <c:forEach begin="1" end="${totalPages}" var="i">
-                            <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                <a class="page-link" href="${pageContext.request.contextPath}/admin/user-management?page=${i}&search=${search}&role=${roleFilter}&status=${statusFilter}&sortBy=${sortBy}&sortOrder=${sortOrder}">${i}</a>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                </nav>
             </div>
 
             <!-- Add User Modal -->
@@ -409,55 +405,101 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="${pageContext.request.contextPath}/admin/user-management" method="POST" name="add-user">
-                                <input type="hidden" name="action" value="create">
-                                <c:if test="${not empty error}">
-                                    <div class="alert alert-danger">${error}</div>
+                            <form action="${pageContext.request.contextPath}/admin/users" method="POST">
+                                <input type="hidden" name="action" value="addUser">
+                                <c:if test="${not empty sessionScope.errorNull}">
+                                    <div class="alert alert-danger">${sessionScope.errorNull}</div>
                                 </c:if>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" maxlength="250" class="form-control" id="email" name="email" required>
+                                    <input type="email" class="form-control" id="email" name="email" >
+                                </div>
+                                <c:if test="${not empty sessionScope.errorEmailExists}">
+                                    <div class="alert alert-danger">${sessionScope.errorEmailExists}</div>
+                                </c:if>
+                                <c:if test="${not empty sessionScope.errorEmail}">
+                                    <div class="alert alert-danger">${sessionScope.errorEmail}</div>
+                                </c:if>
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" >
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
-                                    <input type="password" maxlength="250" class="form-control" id="password" name="password" required>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <c:if test="${not empty sessionScope.errorPassword}">
+                                    <div class="alert alert-danger">${sessionScope.errorPassword}</div>
+                                </c:if>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confPassword" name="confPassword" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" maxlength="250" class="form-control" id="name" name="name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="role" class="form-label">Role</label>
+                                    <label for="role" class="form-label">Select role</label>
                                     <select class="form-control" id="role" name="role" required>
-                                        <option value="ADMIN">Admin</option>
-                                        <option value="CUSTOMER">Customer</option>
+                                        <c:if test="${not empty roles}">
+                                            <c:forEach var="role" items="${roles}">
+                                                <option value="${role.roleName}">${role.roleName}</option>
+                                            </c:forEach>
+                                        </c:if>
                                     </select>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status</label>
-                                    <select class="form-control" id="status" name="status" required>
-                                        <option value="ACTIVE">Active</option>
-                                        <option value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Add</button>
+                                <button type="submit" class="btn btn-primary">Add User</button>
                             </form>
+                            <c:choose>
+                                <c:when test="${not empty sessionScope.errorEmailExists}">
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var addUserModal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                                            addUserModal.show();
+                                        });
+                                    </script>
+                                    <c:remove var="errorEmailExists" scope="session"/>
+                                </c:when>
+
+                                <c:when test="${not empty sessionScope.errorEmail}">
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var addUserModal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                                            addUserModal.show();
+                                        });
+                                    </script>
+                                    <c:remove var="errorEmail" scope="session"/>
+                                </c:when>
+
+                                <c:when test="${not empty sessionScope.errorNull}">
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var addUserModal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                                            addUserModal.show();
+                                        });
+                                    </script>
+                                    <c:remove var="errorNull" scope="session"/>
+                                </c:when>
+
+                                <c:when test="${not empty sessionScope.errorPassword}">
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var addUserModal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                                            addUserModal.show();
+                                        });
+                                    </script>
+                                    <c:remove var="errorPassword" scope="session"/>
+                                </c:when>
+
+                            </c:choose>
                         </div>
                     </div>
                 </div>
             </div>
-
             <!-- Bootstrap JS and Sort Script -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script>
-                function sortTable(column) {
-                    const currentSortBy = '${sortBy}';
-                    const currentSortOrder = '${sortOrder}';
-                    const newSortOrder = (currentSortBy === column && currentSortOrder === 'ASC') ? 'DESC' : 'ASC';
-                    const url = `${pageContext.request.contextPath}/admin/user-management?sortBy=${column}&sortOrder=${newSortOrder}&search=${encodeURIComponent('${search}')}&role=${encodeURIComponent('${roleFilter}')}&status=${encodeURIComponent('${statusFilter}')}&page=${'${currentPage}'}`;
-                    window.location.href = url;
-                }
-            </script>
+
         </div>
     </body>
 </html>

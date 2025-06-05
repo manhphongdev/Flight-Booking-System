@@ -24,7 +24,7 @@
             </h2>
             <div id="userCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
                 <div class="accordion-body p-0">
-                    <a href="/flights/admin/users" class="${activePage == 'users' ? 'active' : ''}"><i class="bi bi-person me-2"></i> Users</a>
+                    <a href="${pageContext.request.contextPath}/admin/users" class="${activePage == 'users' ? 'active' : ''}"><i class="bi bi-person me-2"></i> Users</a>
                     <a href="/flights/admin/access-manager" class="${activePage == 'access-manager' ? 'active' : ''}"><i class="bi bi-shield-lock me-2"></i> Roles & Permissions</a>
                 </div>
             </div>
@@ -43,8 +43,8 @@
                     <a href="/flights/admin/booking" class="${activePage == 'booking' ? 'active' : ''}"><i class="bi bi-ticket me-2"></i> Booking</a>
                     <a href="/flights/admin/booking-seats" class="${activePage == 'booking-seats' ? 'active' : ''}"><i class="bi bi-grid-3x3 me-2"></i> Booking Seats</a>
                     <a href="/flights/admin/passenger" class="${activePage == 'passenger' ? 'active' : ''}"><i class="bi bi-person-circle me-2"></i> Passenger</a>
-                    <a href="/flights/admin/airlines" class="${activePage == 'airlines' ? 'active' : ''}"><i class="bi bi-building me-2"></i> Airlines</a>
-                    <a href="/flights/admin/flight-operator/airport" class="${activePage == 'airport' ? 'active' : ''}"><i class="bi bi-geo-alt me-2"></i> Airport</a>
+                    <a href="${pageContext.request.contextPath}/flightmanager/airline" class="${activePage == 'airlines' ? 'active' : ''}"><i class="bi bi-building me-2"></i> Airlines</a>
+                    <a href="${pageContext.request.contextPath}/flightmanager/airport" class="${activePage == 'airport' ? 'active' : ''}"><i class="bi bi-geo-alt me-2"></i> Airport</a>
                 </div>
             </div>
         </div>

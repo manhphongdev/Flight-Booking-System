@@ -7,22 +7,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DBContext {
-    private static Connection conn;
 
-    public DBContext() {}
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=FlightBookingDB";
+    private static final String USER = "sa";
+    private static final String PASSWORD = "sa";
 
+    
     public static Connection getConn() {
+        Connection conn = null;
         try {
-            if (conn == null || conn.isClosed()) {  
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                String url = "jdbc:sqlserver://localhost:1433;databaseName=FlightBookingDB";
-                String username = "sa";
-                String password = "sa";
-                conn = DriverManager.getConnection(url, username, password);
-            }
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Connection failed: " + e.getMessage());
-            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, "Connection failed", e);
         }
         return conn;
     }

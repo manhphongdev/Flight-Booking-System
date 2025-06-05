@@ -1,4 +1,3 @@
-
 package model;
 
 import java.time.LocalDateTime;
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
  * @version 1.0
  */
 public class EmailAuthentication {
-    
+
     private Long id;
     private Long userid;
     private String token;
@@ -79,5 +78,4 @@ public class EmailAuthentication {
         return "EmailAuthentication{" + "id=" + id + ", userid=" + userid + ", token=" + token + ", expiredAt=" + expiredAt + ", status=" + status + '}';
     }
 
-   
 }

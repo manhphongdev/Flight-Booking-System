@@ -14,22 +14,10 @@
         <title>Verify failed</title>
     </head>
     <body>
-        <h1>Verify failed!</h1>
-        <c:if test="${param.message == 'id not found!'}">
-            <p>Người dùng không tồn tại! Vui lòng click vào đây để trở về trang chủ</p>
-            <a href="${pageContext.request.contextPath}/home">Trở về trang chủ</a>
+        <h1>Xác thực thất bại!</h1>
+        <c:if test="${not empty errorRegister}">
+            <p>${errorRegister}</p> 
         </c:if>
-        <c:if test="${param.message == 'token not exist!'}">
-            <p>Link xác nhận không tồn tại hoặc đã hết hạn! Vui lòng đăng ký lại</p>
-            <a href="${pageContext.request.contextPath}/home">Trở về trang chủ</a>
-        </c:if>   
-        <c:if test="${param.message == 'token has expired!'}">
-            <p>Link xác nhận không tồn tại hoặc đã hết hạn! Vui lòng đăng ký lại</p>
-            <a href="${pageContext.request.contextPath}/home">Trở về trang chủ</a>
-        </c:if> 
-            <c:if test="${param.message == null}">
-            <p>ERROR</p>
-            <a href="${pageContext.request.contextPath}/home">Trở về trang chủ</a>
-        </c:if> 
+        <a href="${pageContext.request.contextPath}/home">Trở về trang chủ</a>
     </body>
 </html>

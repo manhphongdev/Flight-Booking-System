@@ -6,6 +6,7 @@ import java.util.Optional;
 /**
  *
  * @author manhphong
+ * @param <T>
  */
 public interface IBaseDAO<T> {
 
@@ -35,14 +36,16 @@ public interface IBaseDAO<T> {
     /**
      * update a entity
      *
+     * @param id
      * @param entity
      */
-    boolean updateByID(Long id);
+     public boolean updateByID(Long id, T entity);
 
     /**
      * delete a entity T by id
      *
      * @param id
+     * @return 
      */
     boolean deleteByID(Long id);
 

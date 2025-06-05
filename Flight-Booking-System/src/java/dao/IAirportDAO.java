@@ -7,7 +7,7 @@ package dao;
 
 import java.util.List;
 import java.util.Optional;
-import model.AirportEntity;
+import model.Airport;
 
 
 /**
@@ -16,10 +16,10 @@ import model.AirportEntity;
  */
 public interface IAirportDAO {
 
-       boolean insert(AirportEntity airport);
-       List<AirportEntity> findAll();
-       Optional<AirportEntity> findByCode(String code);
-       boolean updateByCode(AirportEntity entity);
+       boolean insert(Airport airport);
+       List<Airport> findAll();
+       Optional<Airport> findByCode(String code);
+       boolean updateByCode(Airport entity);
        boolean deleteByCode(String code);
        
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.PermissionEntity;
+import model.Permission;
 import utils.DBContext;
 
 /**
@@ -20,13 +20,13 @@ import utils.DBContext;
  */
 public class PermissionDAOImpl implements IPermissionDAO {
 
-    public PermissionEntity permissionMapper(ResultSet rs) throws Exception {
-        return new PermissionEntity(rs.getLong("permission_id"), rs.getNString("permission_name"), rs.getNString("description"));
+    public Permission permissionMapper(ResultSet rs) throws Exception {
+        return new Permission(rs.getLong("permission_id"), rs.getNString("permission_name"), rs.getNString("description"));
     }
 
     @Override
-    public Optional<PermissionEntity> findByID(Long id) {
-        PermissionEntity permission = null;
+    public Optional<Permission> findByID(Long id) {
+        Permission permission = null;
         String sql = "SELECT * FROM [Permission] WHERE permission_id = ?";
 
         try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -45,8 +45,8 @@ public class PermissionDAOImpl implements IPermissionDAO {
     }
 
     @Override
-    public List<PermissionEntity> findAll() {
-        List<PermissionEntity> permissions = new LinkedList<>();
+    public List<Permission> findAll() {
+        List<Permission> permissions = new LinkedList<>();
 
         String sql = "select * from [Permission]";
 
@@ -66,7 +66,7 @@ public class PermissionDAOImpl implements IPermissionDAO {
     }
 
     @Override
-    public Long insert(PermissionEntity entity) {
+    public Long insert(Permission entity) {
         StringBuilder sb = new StringBuilder("insert into [Permission] (permission_name, description)");
         sb.append("values(?,?)");
         Connection conn = null;
@@ -108,10 +108,6 @@ public class PermissionDAOImpl implements IPermissionDAO {
         return null;
     }
 
-    @Override
-    public boolean updateByID(Long id) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     public boolean deleteByID(Long id) {
@@ -128,12 +124,12 @@ public class PermissionDAOImpl implements IPermissionDAO {
     }
 
     @Override
-    public List<PermissionEntity> selectByCondition() {
+    public List<Permission> selectByCondition() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public boolean updateByPermissionName(PermissionEntity entity, PermissionEntity newEntity) {
+    public boolean updateByPermissionName(Permission entity, Permission newEntity) {
 
         StringBuilder sb = new StringBuilder();
         sb.append("update [Permission] set permission_name = ?, description = ? ");
@@ -171,8 +167,8 @@ public class PermissionDAOImpl implements IPermissionDAO {
     }
 
     @Override
-    public Optional<PermissionEntity> findByName(String permissionName) {
-        PermissionEntity role = null;
+    public Optional<Permission> findByName(String permissionName) {
+        Permission role = null;
         String sql = "SELECT * FROM [Permission] WHERE permission_name = ?";
 
         try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -236,6 +232,11 @@ public class PermissionDAOImpl implements IPermissionDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public boolean updateByID(Long id, Permission entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller.common;
 
 import exception.EntityExistExeption;
@@ -12,8 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.logging.Logger;
-import model.UserEntity;
-import service.IUserService;
+import model.User;
+import service.interfaces.IUserService;
 import service.serviceimpl.UserServiceImpl;
 import utils.ResourseMSG;
 import utils.ValidatorUtils;
@@ -21,6 +17,7 @@ import utils.ValidatorUtils;
 /**
  *
  * @author Administrator
+ * @version 1.0
  */
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/auth/register"})
 public class RegisterServlet extends HttpServlet {
@@ -49,10 +46,10 @@ public class RegisterServlet extends HttpServlet {
             LOG.warning(ResourseMSG.IS_EMPTY);
         }
         
-        if(password.length() <6){
+        if(password.length() <8){
            req.setAttribute("errorPassword", ResourseMSG.ERRORS_PASSWORD); 
         }
-        UserEntity user = new UserEntity(email, password, firstName, lastName);
+        User user = new User(email, password, firstName.trim(), lastName.trim());
         try {
             uService.register(user);
             resp.sendRedirect(req.getContextPath() + "/home");
@@ -60,7 +57,5 @@ public class RegisterServlet extends HttpServlet {
             req.setAttribute("errorRegister", ResourseMSG.ERRORS_EMAIL_EXIST);
             req.getRequestDispatcher("/views/customer/home.jsp").forward(req, resp);
         }
-        
     }
-    
 }

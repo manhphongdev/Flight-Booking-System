@@ -1,19 +1,20 @@
 package dao;
 
+import java.util.List;
 import java.util.Optional;
-import model.UserEntity;
+import model.User;
 
 /**
  *
  * @author manhphong
  */
-public interface IUserDAO extends IBaseDAO<UserEntity> {
+public interface IUserDAO extends IBaseDAO<User> {
 
     /* find a user by email
      * @param email
      * @return a userEntity obejct
      */
-    Optional<UserEntity> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     /**
      * find user by email + password + role
@@ -23,11 +24,22 @@ public interface IUserDAO extends IBaseDAO<UserEntity> {
      * @param role
      * @return
      */
-    Optional<UserEntity> findByEmailAndPasswordAndRole(String email, String password, String role);
+    Optional<User> findByEmailAndPasswordAndRole(String email, String password, String role);
 
-    Optional<UserEntity> findByEmailAndPassword(String email, String password);
+    Optional<User> findByEmailAndPassword(String email, String password);
 
-    String getUserRole(UserEntity user);
+    String getUserRole(User user);
     
-    void addUserHasRole(UserEntity user);
+    void addUserHasRole(User user);
+    
+    //void updateUserRole(Long userId, Long role);
+    
+    boolean updateUserHasRole(Long id, String role);
+    
+    List<User> searchByName(String name);
+    
+    List<User> searchByEmail(String email);
+    
+    List<User> searchByNameAndRole(String name, String role);
+    List<User> searchByEmailAndRole(String email, String role);
 }

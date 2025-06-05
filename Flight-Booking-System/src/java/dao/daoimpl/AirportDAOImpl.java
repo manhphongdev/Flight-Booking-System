@@ -16,19 +16,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.AirportEntity;
+import model.Airport;
 import utils.DBContext;
 
 /**
- *
- * @author manhphong
+ * 
+ * @author Administrator
+ * @version 1.0
  */
 public class AirportDAOImpl implements IAirportDAO {
 
     private static final Logger LOG = Logger.getLogger(AirportDAOImpl.class.getName());
 
-    private AirportEntity airportMapper(ResultSet rs) throws SQLException {
-    return new AirportEntity(
+    private Airport airportMapper(ResultSet rs) throws SQLException {
+    return new Airport(
         rs.getString("airport_code"),
         rs.getString("airport_name"),
         rs.getString("city"),
@@ -39,8 +40,8 @@ public class AirportDAOImpl implements IAirportDAO {
 }
 
     @Override
-    public List<AirportEntity> findAll() {
-        List<AirportEntity> lists = new ArrayList<>();
+    public List<Airport> findAll() {
+        List<Airport> lists = new ArrayList<>();
         String sql = "Select * from [Airport]";
 
         try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -59,7 +60,7 @@ public class AirportDAOImpl implements IAirportDAO {
     }
 
     @Override
-    public boolean insert(AirportEntity entity) {
+    public boolean insert(Airport entity) {
         String sql = "INSERT INTO [Airport] (airport_code, airport_name, city, country, created_at) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -77,7 +78,7 @@ public class AirportDAOImpl implements IAirportDAO {
     }
 
     @Override
-    public Optional<AirportEntity> findByCode(String code) {
+    public Optional<Airport> findByCode(String code) {
 
         String sql = "Select * from [Airport] where airport_code = ?";
 
@@ -95,7 +96,7 @@ public class AirportDAOImpl implements IAirportDAO {
     }
 
     @Override
-    public boolean updateByCode( AirportEntity entity) {
+    public boolean updateByCode( Airport entity) {
         StringBuilder sb = new StringBuilder();
         sb.append("update [Airport] set airport_name = ?, city = ?, country = ?, updated_at = ? ");
         sb.append("where airport_code = ?");

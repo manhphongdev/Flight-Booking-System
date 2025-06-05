@@ -12,7 +12,7 @@
         <title>Verify Successful</title>
     </head>
     <body>
-        <h1>Verify Successful</h1>
+        <h1>Xác thực thành công</h1>
         <a href="${pageContext.request.contextPath}/home">Trở về trang chủ</a>
     </body>
 </html>

@@ -9,10 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.PermissionEntity;
-import model.RoleEntity;
-import service.IPermissionService;
-import service.IRoleService;
+import model.Permission;
+import model.Role;
+import service.interfaces.IPermissionService;
+import service.interfaces.IRoleService;
 import service.serviceimpl.PermissionServiceImpl;
 import service.serviceimpl.RoleServiceImpl;
 import utils.ValidatorUtils;
@@ -103,7 +103,7 @@ public class RoleAndPermissionController extends HttpServlet {
             throw new IllegalArgumentException("Input is empty!");
         }
 
-        boolean inserted = rService.addRole(new RoleEntity(roleName.trim(), description.trim()));
+        boolean inserted = rService.addRole(new Role(roleName.trim(), description.trim()));
         if (!inserted) {
             String addRoleMsg = roleName + " is exist";
             req.setAttribute("addRoleMsg", addRoleMsg);
@@ -112,7 +112,7 @@ public class RoleAndPermissionController extends HttpServlet {
 
     private void getAllRole(HttpServletRequest req, HttpServletResponse resp) {
 
-        List<RoleEntity> roles = rService.getAllRole();
+        List<Role> roles = rService.getAllRole();
 
         req.setAttribute("roles", roles);
     }
@@ -123,7 +123,7 @@ public class RoleAndPermissionController extends HttpServlet {
         String newDescription = req.getParameter("newDescription");
 
         if (newRoleName != null && newDescription != null) {
-            boolean f = rService.updateByRoleName(new RoleEntity(newRoleName.trim().toUpperCase(),
+            boolean f = rService.updateByRoleName(new Role(newRoleName.trim().toUpperCase(),
                     newDescription), roleNameEdit);
             if (f == false) {
                 req.setAttribute("updateFaild", "Name of role is exist");
@@ -144,7 +144,7 @@ public class RoleAndPermissionController extends HttpServlet {
 
     private void getAllPermission(HttpServletRequest req, HttpServletResponse res) {
 
-        List<PermissionEntity> permissions = pService.getAllPermission();
+        List<Permission> permissions = pService.getAllPermission();
         req.setAttribute("permissions", permissions);
     }
 
@@ -156,7 +156,7 @@ public class RoleAndPermissionController extends HttpServlet {
             LOG.warning("Input permission is empty");
         }
 
-        boolean inserted = pService.addPermission(new PermissionEntity(permissionName, description));
+        boolean inserted = pService.addPermission(new Permission(permissionName, description));
 
         if (!inserted) {
             String msg = permissionName + " is exist";
@@ -184,7 +184,7 @@ public class RoleAndPermissionController extends HttpServlet {
         String newPermissionDescription = req.getParameter("newPermissionDescription");
 
         if (newPermissionName != null && newPermissionDescription != null) {
-            boolean f = pService.updateByPermissionName(new PermissionEntity(
+            boolean f = pService.updateByPermissionName(new Permission(
                     newPermissionName.trim().toLowerCase(),
                     newPermissionDescription), permission);
             if (f == false) {

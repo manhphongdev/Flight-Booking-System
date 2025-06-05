@@ -63,6 +63,7 @@ public class EmailAuthenticationDAOImpl implements IEmailAuthenticationDAO {
         return false;
     }
 
+    @Override
     public Optional<EmailAuthentication> getEmailAuthencication(Long userId) {
         String sql = "SELECT * FROM [Email_Authentication] WHERE user_id = ?";
         try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -10,8 +10,8 @@ import exception.EntityExistExeption;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.AirportEntity;
-import service.IAirportService;
+import model.Airport;
+import service.interfaces.IAirportService;
 
 /**
  *
@@ -27,7 +27,7 @@ public class AirportServiceImpl implements IAirportService {
     }
 
     @Override
-    public boolean save(AirportEntity airport) {
+    public boolean save(Airport airport) {
         // check airport is exist
         if (airportDAO.findByCode(airport.getAirportCode()).isPresent()) {
             throw new EntityExistExeption("Airport is exist! Code: " + airport.getAirportCode()) ;
@@ -38,17 +38,17 @@ public class AirportServiceImpl implements IAirportService {
     }
 
     @Override
-    public AirportEntity getByCode(String code) {
+    public Airport getByCode(String code) {
         return airportDAO.findByCode(code).orElse(null);
     }
 
     @Override
-    public List<AirportEntity> getAll() {
+    public List<Airport> getAll() {
         return airportDAO.findAll();
     }
 
     @Override
-    public boolean updateByCode(AirportEntity entity) {
+    public boolean updateByCode(Airport entity) {
 
         boolean isUpdate = airportDAO.updateByCode( entity);
         if (!isUpdate) {

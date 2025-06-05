@@ -10,6 +10,7 @@ import enums.ErrorCode;
 /**
  *
  * @author manhphong
+ * @version 1.0
  */
 public class EntityExistExeption extends ServiceException{
     public EntityExistExeption( String message) {

@@ -191,7 +191,6 @@
     </head>
     <body>
         <!-- Sidebar -->
-        <c:set var="activePage" value="airport" scope="request"/>
         <%@ include file="sidebar.jsp" %>
 
         <!-- Main Content -->
@@ -209,7 +208,7 @@
                 </div>
                 <div class="search-header-container">
                     <h3 class="search-header-title">Airport List</h3>
-                    <form method="GET" action="/flights/admin/flight-operator/airport" class="custom-search-form">
+                    <form method="GET" action="${pageContext.request.contextPath}/flightmanager/airport" class="custom-search-form">
                         <input type="hidden" name="action" value="findByCode">
                         <input type="search" id="custom-search-input" name="airportCode" placeholder="Search by airport code" class="custom-search-input" value="${param.airportCode}">
                         <button type="submit" class="custom-search-button"><i class="bi bi-search me-2"></i>Search</button>
@@ -220,23 +219,18 @@
                         <tr>
                             <th style="width: 7vw">
                                 Airport Code
-                                <a href="/flights/admin/flights?action=sort&sortBy=flight_id&sortOrder=${param.sortBy == 'flight_id' && param.sortOrder == 'ASC' ? 'DESC' : 'ASC'}&airlineId=${param.airlineId}" class="sort-icon ${param.sortBy == 'flight_id' ? (param.sortOrder == 'ASC' ? 'asc' : 'desc') : ''}"></a>
                             </th>
                             <th style="width: 20vw">
                                 Airport Name
-                                <a href="/flights/admin/flights?action=sort&sortBy=airline_id&sortOrder=${param.sortBy == 'airline_id' && param.sortOrder == 'ASC' ? 'DESC' : 'ASC'}&airlineId=${param.airlineId}" class="sort-icon ${param.sortBy == 'airline_id' ? (param.sortOrder == 'ASC' ? 'asc' : 'desc') : ''}"></a>
                             </th>
                             <th style="width: 14vw">
                                 City
-                                <a href="/flights/admin/flights?action=sort&sortBy=economyPrice&sortOrder=${param.sortBy == 'economyPrice' && param.sortOrder == 'ASC' ? 'DESC' : 'ASC'}&airlineId=${param.airlineId}" class="sort-icon ${param.sortBy == 'economyPrice' ? (param.sortOrder == 'ASC' ? 'asc' : 'desc') : ''}"></a>
                             </th>
                             <th style="width: 14vw">
                                 Country
-                                <a href="/flights/admin/flights?action=sort&sortBy=businessPrice&sortOrder=${param.sortBy == 'businessPrice' && param.sortOrder == 'ASC' ? 'DESC' : 'ASC'}&airlineId=${param.airlineId}" class="sort-icon ${param.sortBy == 'businessPrice' ? (param.sortOrder == 'ASC' ? 'asc' : 'desc') : ''}"></a>
                             </th>
                             <th style="width: 14vw">
                                 Created At
-                                <a href="/flights/admin/flights?action=sort&sortBy=created_at&sortOrder=${param.sortBy == 'created_at' && param.sortOrder == 'ASC' ? 'DESC' : 'ASC'}&airlineId=${param.airlineId}" class="sort-icon ${param.sortBy == 'created_at' ? (param.sortOrder == 'ASC' ? 'asc' : 'desc') : ''}"></a>
                             </th>
                             <th style="width: 10vw">Action</th>
                         </tr>
@@ -260,7 +254,7 @@
 
                                     <!-- Delete Confirmation Modal -->
                                     <div class="form-confirm-delete">
-                                        <form method="POST" action="/flights/admin/flight-operator/airport">
+                                        <form method="POST" action="${pageContext.request.contextPath}/flightmanager/airport">
                                             <input type="hidden" name="action" value="deleteAirport">
                                             <input type="hidden" name="codeDelete" value="${airport.airportCode}">
                                             <div class="modal fade" id="deleteConfirmModal-${airport.airportCode}" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
@@ -292,11 +286,15 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="/flights/admin/flight-operator/airport" method="POST">
+                                                    <form action="${pageContext.request.contextPath}/flightmanager/airport" method="POST">
                                                         <input type="hidden" name="action" value="editAirport">
                                                         <input type="hidden" name="codeUpdate"  value="${airport.airportCode} ">
-                                                        <c:if test="${not empty updateFailed}">
-                                                            <div class="alert alert-danger">${updateFailed}</div>
+                                                        <c:if test="${not empty sessionScope.errorNull}">
+                                                            <div class="alert alert-danger">${sessionScope.errorNull}</div>
+                                                        </c:if>
+                                                            
+                                                        <c:if test="${not empty sessionScope.updateFailed}">
+                                                            <div class="alert alert-danger">${sessionScope.updateFailed}</div>
                                                         </c:if>
                                                         <div class="mb-3">
                                                             <label for="editAirportCode-${airport.airportCode}"  class="form-label">Airport Code</label>
@@ -316,14 +314,25 @@
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Save Changes</button>
                                                     </form>
-                                                    <c:if test="${not empty updateFailed}">
+                                                    <c:if test="${not empty sessionScope.errorNull}">
                                                         <script>
                                                             document.addEventListener('DOMContentLoaded', function () {
                                                                 var editFlightModal = new bootstrap.Modal(document.getElementById('editFlightModal-${flight.flightId}'));
                                                                 editFlightModal.show();
                                                             });
                                                         </script>
+                                                        <c:remove var="errorNull" scope="session"></c:remove>
                                                     </c:if>
+                                                    <c:if test="${not empty sessionScope.updateFailed}">
+                                                        <script>
+                                                            document.addEventListener('DOMContentLoaded', function () {
+                                                                var editFlightModal = new bootstrap.Modal(document.getElementById('editFlightModal-${flight.flightId}'));
+                                                                editFlightModal.show();
+                                                            });
+                                                        </script>
+                                                        <c:remove var="updateFailed" scope="session"></c:remove>
+                                                    </c:if>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -344,15 +353,21 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="/flights/admin/flight-operator/airport" method="POST" name="add-airport">
+                            <form action="${pageContext.request.contextPath}/flightmanager/airport" method="POST" name="add-airport">
                                 <input type="hidden" name="action" value="addAirport">
-                                <c:if test="${not empty addAirportFailed}">
-                                    <div class="alert alert-danger" style="color: red">${addAirportFailed}</div>
+                                <c:if test="${not empty sessionScope.errorNull}">
+                                    <div class="alert alert-danger" style="color: red">${sessionScope.errorNull}</div>
+                                </c:if>
+                                <c:if test="${not empty sessionScope.addAirportFailed}">
+                                    <div class="alert alert-danger" style="color: red">${sessionScope.addAirportFailed}</div>
                                 </c:if>
                                 <div class="mb-3">
                                     <label for="airportCode" class="form-label">Code</label>
                                     <input type="text" maxlength="4" class="form-control" id="airportCode" name="airportCode" required>
                                 </div>
+                                <c:if test="${not empty sessionScope.errorCode}">
+                                    <div class="alert alert-danger" style="color: red">${sessionScope.errorCode}</div>
+                                </c:if>
                                 <div class="mb-3">
                                     <label for="airportName" class="form-label">Airport</label>
                                     <input type="text" maxlength="250" class="form-control" id="airportName" name="airportName" required>
@@ -367,14 +382,35 @@
                                 </div>   
                                 <button type="submit" class="btn btn-primary">Add</button>
                             </form>
-                            <c:if test="${not empty addAirportFailed}">
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        var addAirportModal = new bootstrap.Modal(document.getElementById('addAirportModal'));
-                                        addAirportModal.show();
-                                    });
-                                </script>
-                            </c:if>
+                            <c:choose>
+                                <c:when test="${not empty sessionScope.errorNull}">
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var addAirportModal = new bootstrap.Modal(document.getElementById('addAirportModal'));
+                                            addAirportModal.show();
+                                        });
+                                    </script>
+                                    <c:remove var="errorNull" scope="session"/>
+                                </c:when>
+                                <c:when test="${not empty sessionScope.errorCode}">
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var addAirportModal = new bootstrap.Modal(document.getElementById('addAirportModal'));
+                                            addAirportModal.show();
+                                        });
+                                    </script>
+                                    <c:remove var="errorCode" scope="session"/>
+                                </c:when>
+                                <c:when test="${not empty sessionScope.addAirportFailed}">
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var addAirportModal = new bootstrap.Modal(document.getElementById('addAirportModal'));
+                                            addAirportModal.show();
+                                        });
+                                    </script>
+                                    <c:remove var="addAirportFailed" scope="session"/>
+                                </c:when>
+                            </c:choose>
                         </div>
                     </div>
                 </div>

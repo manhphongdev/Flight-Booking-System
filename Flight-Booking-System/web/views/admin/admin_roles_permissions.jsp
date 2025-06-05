@@ -193,81 +193,9 @@
     </head>
     <body>
         <!-- Sidebar -->
-        <div class="sidebar">
-            <h3 class="text-white text-center mb-4">Admin Dashboard</h3>
-            <div class="accordion" id="sidebarAccordion">
-                <div class="accordion-item bg-transparent border-0">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#overviewCollapse">
-                            <i class="bi bi-house me-2"></i> Overview
-                        </button>
-                    </h2>
-                    <div id="overviewCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
-                        <div class="accordion-body p-0">
-                            <a href="admin_dashboard.jsp"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item bg-transparent border-0">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#userCollapse">
-                            <i class="bi bi-people me-2"></i> User Management
-                        </button>
-                    </h2>
-                    <div id="userCollapse" class="accordion-collapse collapse show" data-bs-parent="#sidebarAccordion">
-                        <div class="accordion-body p-0">
-                            <a href="admin_users.jsp"><i class="bi bi-person me-2"></i> Users</a>
-                            <a href="/flights/admin/access-manager" class="active"><i class="bi bi-shield-lock me-2"></i> Roles & Permissions</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item bg-transparent border-0">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flightCollapse">
-                            <i class="bi bi-airplane me-2"></i> Flight Operations
-                        </button>
-                    </h2>
-                    <div id="flightCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
-                        <div class="accordion-body p-0">
-                            <a href="admin_flights.jsp"><i class="bi bi-airplane-fill me-2"></i> Flights</a>
-                            <a href="admin_flight_schedule.jsp"><i class="bi bi-calendar me-2"></i> Flight Schedule</a>
-                            <a href="admin_seats.jsp"><i class="bi bi-grid me-2"></i> Seats</a>
-                            <a href="admin_booking.jsp"><i class="bi bi-ticket me-2"></i> Booking</a>
-                            <a href="admin_booking_seats.jsp"><i class="bi bi-grid-3x3 me-2"></i> Booking Seats</a>
-                            <a href="admin_passenger.jsp"><i class="bi bi-person-circle me-2"></i> Passenger</a>
-                            <a href="admin_airlines.jsp"><i class="bi bi-building me-2"></i> Airlines</a>
-                            <a href="admin_airport.jsp"><i class="bi bi-geo-alt me-2"></i> Airport</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item bg-transparent border-0">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#financeCollapse">
-                            <i class="bi bi-wallet me-2"></i> Financial & Analytics
-                        </button>
-                    </h2>
-                    <div id="financeCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
-                        <div class="accordion-body p-0">
-                            <a href="admin_coupons.jsp"><i class="bi bi-ticket-perforated me-2"></i> Coupons</a>
-                            <a href="admin_payments.jsp"><i class="bi bi-currency-dollar me-2"></i> Payments</a>
-                            <a href="admin_logs.jsp"><i class="bi bi-journal-text me-2"></i> Logs</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item bg-transparent border-0">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accountCollapse">
-                            <i class="bi bi-person-circle me-2"></i> Account
-                        </button>
-                    </h2>
-                    <div id="accountCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
-                        <div class="accordion-body p-0">
-                            <a href="logout.jsp"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+         <!-- Sidebar -->
+        <c:set var="activePage" value="admin-roles-permissions" scope="request"/>
+        <%@ include file="sidebar.jsp" %>
 
         <!-- Main Content -->
         <div class="content">

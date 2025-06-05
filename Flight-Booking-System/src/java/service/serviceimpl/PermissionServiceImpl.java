@@ -4,8 +4,8 @@ import dao.IPermissionDAO;
 import dao.daoimpl.PermissionDAOImpl;
 import java.util.List;
 import java.util.Optional;
-import model.PermissionEntity;
-import service.IPermissionService;
+import model.Permission;
+import service.interfaces.IPermissionService;
 
 /**
  *
@@ -20,8 +20,8 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
-    public boolean addPermission(PermissionEntity permission) {
-        Optional<PermissionEntity> entity = dao.findByID(permission.getPermissionId());
+    public boolean addPermission(Permission permission) {
+        Optional<Permission> entity = dao.findByID(permission.getPermissionId());
         if (!entity.isEmpty()) {
             return false;
         }
@@ -30,18 +30,18 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
-    public boolean updateByPermissionName(PermissionEntity newEntity, String permission) {
-        Optional<PermissionEntity> entity = dao.findByName(permission);
+    public boolean updateByPermissionName(Permission newEntity, String permission) {
+        Optional<Permission> entity = dao.findByName(permission);
         if (entity.isEmpty()) {
             return false;
         }
-        PermissionEntity permissionEntity = entity.get();
+        Permission permissionEntity = entity.get();
         dao.updateByPermissionName(permissionEntity, newEntity);
         return true;
     }
 
     @Override
-    public List<PermissionEntity> getAllPermission() {
+    public List<Permission> getAllPermission() {
         return dao.findAll();
     }
 

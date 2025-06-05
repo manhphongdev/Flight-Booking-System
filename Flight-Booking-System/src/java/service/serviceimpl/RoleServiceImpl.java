@@ -6,9 +6,9 @@ import dao.daoimpl.PermissionDAOImpl;
 import dao.daoimpl.RoleDAOImpl;
 import java.util.List;
 import java.util.Optional;
-import model.PermissionEntity;
-import model.RoleEntity;
-import service.IRoleService;
+import model.Permission;
+import model.Role;
+import service.interfaces.IRoleService;
 
 /**
  *
@@ -25,8 +25,8 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public boolean addRole(RoleEntity role) {
-        Optional<RoleEntity> check = roleDAO.findByName(role.getRoleName());
+    public boolean addRole(Role role) {
+        Optional<Role> check = roleDAO.findByName(role.getRoleName());
         if (!check.isEmpty()) {
             return false;
         }
@@ -35,18 +35,18 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public boolean updateByRoleName(RoleEntity newEntity, String roleName) {
-        Optional<RoleEntity> entity = roleDAO.findByName(roleName);
+    public boolean updateByRoleName(Role newEntity, String roleName) {
+        Optional<Role> entity = roleDAO.findByName(roleName);
         if (entity.isEmpty()) {
             return false;
         }
-        RoleEntity roleEntity = entity.get();
+        Role roleEntity = entity.get();
         roleDAO.updateByRoleName(roleEntity, newEntity);
         return true;
     }
 
     @Override
-    public List<RoleEntity> getAllRole() {
+    public List<Role> getAllRole() {
         return roleDAO.findAll();
     }
 
@@ -57,8 +57,8 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public boolean addRoleHasPermission(String roleName, String permissionName) {
-        Optional<RoleEntity> role = roleDAO.findByName(roleName);
-        Optional<PermissionEntity> permission = permissionDAO.findByName(permissionName);
+        Optional<Role> role = roleDAO.findByName(roleName);
+        Optional<Permission> permission = permissionDAO.findByName(permissionName);
         
         if(role.isPresent() && permission.isPresent()){
             roleDAO.saveRoleHasPermission(role.get(),permission.get());
@@ -66,6 +66,16 @@ public class RoleServiceImpl implements IRoleService {
         }
         else{
             return false;
+        }
+    }
+    
+    
+    public static void main(String[] args) {
+        RoleServiceImpl roles = new RoleServiceImpl();
+        
+        List<Role> list = roles.getAllRole();
+        for (Role role : list) {
+            System.out.println(role.toString());
         }
     }
 }
