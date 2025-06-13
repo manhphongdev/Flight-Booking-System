@@ -1,7 +1,8 @@
 package service.serviceimpl;
 
-import dao.IAirlineDAO;
+import dao.interfaces.IAirlineDAO;
 import dao.daoimpl.AirlineDAOImpl;
+import dto.response.FlightSearchResponse;
 import exception.EntityExistExeption;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,6 @@ public class AirlineServiceImpl implements IAirlineService {
         return airlineDAO.findAll();
     }
 
-
-
     @Override
     public boolean deleteByCode(String code) {
         boolean isDeleted = airlineDAO.deleteByCode(code);
@@ -51,12 +50,13 @@ public class AirlineServiceImpl implements IAirlineService {
         return isDeleted;
     }
     
+
     public static void main(String[] args) {
         AirlineServiceImpl a = new AirlineServiceImpl();
-        
+
         List<Airline> list = new ArrayList<>();
         for (Airline airline : list) {
             System.out.println(airline.toString());
         }
     }
-} 
+}

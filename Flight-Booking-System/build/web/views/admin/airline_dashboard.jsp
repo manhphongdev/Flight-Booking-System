@@ -218,6 +218,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Airline Name</th>
                                 <th>Code</th>
                                 <th>Created At</th>
@@ -227,7 +228,7 @@
                         <tbody>
                             <c:forEach var="airline" items="${airlines}">
                                 <tr>
-
+                                    <td>${airline.id}</td>
                                     <td>${airline.airlineName}</td>
                                     <td>${airline.airlineCode}</td>
                                     <td>${airline.createAt}</td>

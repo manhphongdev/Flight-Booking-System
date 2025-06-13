@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package service.interfaces;
 
 import java.util.List;
@@ -23,6 +19,7 @@ public interface IAirportService {
 
     /**
      * get airport object by airport code
+     *
      * @param code
      * @return an airport object
      */
@@ -30,12 +27,14 @@ public interface IAirportService {
 
     /**
      * get all airport form database
+     *
      * @return a list of airport
      */
     List<Airport> getAll();
 
     /**
      * update an airport object by code
+     *
      * @param entity
      * @return true if update successfull
      */
@@ -43,9 +42,13 @@ public interface IAirportService {
 
     /**
      * delete an airport entity by code
+     *
      * @param code
      * @return true if delete successfull
      */
     boolean deleteByCode(String code);
-    
+
+    public List<String> getKeyAirportForSearch();
+
+    public List<String> getAirportSuggesstions(String keyword);
 }

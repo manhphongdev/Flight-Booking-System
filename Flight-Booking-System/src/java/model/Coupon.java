@@ -1,7 +1,6 @@
 package model;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -12,16 +11,41 @@ public class Coupon {
 
     private Long couponId;
     private String couponCode;
-    private BigDecimal discountAmount;
-    private BigDecimal discountPercentage;
+    private Integer discountPercentage;
     private Integer maxUsage;
     private Integer usedCount;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String status;
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    // Getters and Setters
+    public Coupon() {
+    }
+
+    public Coupon(String couponCode, Integer discountPercentage, Integer maxUsage, Integer usedCount, LocalDateTime startDate, LocalDateTime endDate, String status, LocalDateTime createdAt) {
+        this.couponCode = couponCode;
+        this.discountPercentage = discountPercentage;
+        this.maxUsage = maxUsage;
+        this.usedCount = usedCount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    
+    public Coupon(Long couponId, String couponCode, Integer discountPercentage, Integer maxUsage, Integer usedCount, LocalDateTime startDate, LocalDateTime endDate, String status, LocalDateTime createdAt) {
+        this.couponId = couponId;
+        this.couponCode = couponCode;
+        this.discountPercentage = discountPercentage;
+        this.maxUsage = maxUsage;
+        this.usedCount = usedCount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
+
     public Long getCouponId() {
         return couponId;
     }
@@ -38,19 +62,11 @@ public class Coupon {
         this.couponCode = couponCode;
     }
 
-    public BigDecimal getDiscountAmount() {
-        return discountAmount;
-    }
-
-    public void setDiscountAmount(BigDecimal discountAmount) {
-        this.discountAmount = discountAmount;
-    }
-
-    public BigDecimal getDiscountPercentage() {
+    public Integer getDiscountPercentage() {
         return discountPercentage;
     }
 
-    public void setDiscountPercentage(BigDecimal discountPercentage) {
+    public void setDiscountPercentage (Integer discountPercentage) {
         this.discountPercentage = discountPercentage;
     }
 
@@ -70,19 +86,19 @@ public class Coupon {
         this.usedCount = usedCount;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -94,11 +110,16 @@ public class Coupon {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Coupon{" + "couponId=" + couponId + ", couponCode=" + couponCode + ", discountPercentage=" + discountPercentage + ", maxUsage=" + maxUsage + ", usedCount=" + usedCount + ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", createdAt=" + createdAt + '}';
     }
 }

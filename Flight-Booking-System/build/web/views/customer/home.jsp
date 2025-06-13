@@ -25,7 +25,7 @@
                 <div>
                     <h1>Bay đến mọi nơi cùng chúng tôi</h1>
                     <p>Đặt vé dễ dàng, giá tốt nhất, hành trình an toàn!</p>
-                    <a href="booking.jsp" class="btn btn-primary mt-3" style="position:relative;
+                    <a href="${pageContext.request.contextPath}/flight/search" class="btn btn-primary mt-3" style="position:relative;
                        z-index: 1;">Đặt vé ngay</a>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="promo-card">
-                                <img src="../resource/image/singapore.jpg" alt="Ưu đãi 3">
+                                <img src="${pageContext.request.contextPath}/views/resource/image/vinh-Marina2-du-lich-otrip.jpg" alt="Ưu đãi 3">
                                 <h3>Khuyến mãi quốc tế</h3>
                                 <p>Bay Singapore, Bangkok với giá ưu đãi, tiết kiệm đến 30%!</p>
                             </div>

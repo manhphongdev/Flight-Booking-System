@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IEmailAuthenticationDAO;
+import dao.interfaces.IEmailAuthenticationDAO;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;

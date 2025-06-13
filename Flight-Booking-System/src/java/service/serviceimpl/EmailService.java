@@ -1,6 +1,6 @@
 package service.serviceimpl;
 
-import dao.IEmailAuthenticationDAO;
+import dao.interfaces.IEmailAuthenticationDAO;
 import dao.daoimpl.EmailAuthenticationDAOImpl;
 import dao.daoimpl.UserDAOImpl;
 import enums.UserStatus;

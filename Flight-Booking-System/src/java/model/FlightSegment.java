@@ -13,7 +13,6 @@ public class FlightSegment {
     private Long flightId;
     private String departureAirport;
     private String arrivalAirport;
-    private Integer distance;
     private LocalDateTime createdAt;
 
     // Getters and Setters
@@ -47,14 +46,6 @@ public class FlightSegment {
 
     public void setArrivalAirport(String arrivalAirport) {
         this.arrivalAirport = arrivalAirport;
-    }
-
-    public Integer getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Integer distance) {
-        this.distance = distance;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -26,7 +26,7 @@
             <nav class="main-nav d-flex align-items-center flex-wrap">
                 <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
                 <a href="#">Khuyến mãi</a>
-                <a href="${pageContext.request.contextPath}/booking.jsp" class="active">Tìm chuyến bay</a>
+                <a href="${pageContext.request.contextPath}/flight/search" class="active">Tìm chuyến bay</a>
                 <a href="#">Đặt chỗ của tôi</a>
             </nav>
             <div class="d-flex align-items-center gap-2 mt-2 mt-md-0 account-group">
@@ -40,30 +40,29 @@
                         <li><a class="dropdown-item" href="#"><b>USD</b> - Đô La Mỹ</a></li>
                     </ul>
                 </div>
-                <% 
-                    boolean isLoggedIn = false;
-                    if (request.getSession(false) != null && request.getSession(false).getAttribute("loggedIn") != null) {
-                        isLoggedIn = (Boolean) request.getSession(false).getAttribute("loggedIn");
-                    }
-                    if (isLoggedIn) { 
-                %>
-                <div class="dropdown account-btn">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                        Tài khoản
-                    </button>
-                    <ul class="dropdown-menu account-menu">
-                        <li><a class="dropdown-item" href="account.jsp">Trang quản lý tài khoản</a></li>
-                        <li><a class="dropdown-item" href="orders.jsp">Đơn đặt của tôi</a></li>
-                        <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
-                    </ul>
-                </div>
-                <% } else { %>
-                <button class="btn btn-outline-primary me-2" type="button" data-bs-toggle="modal"
-                        data-bs-target="#loginModal">Đăng nhập</button>
-                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#registerModal" id="registerBtn"
-                        style="padding: 8px 22px; color: white">Đăng ký</button>
-                <% } %>
+
+                <c:choose >
+                    <c:when test="${not empty sessionScope.sessionUser}">
+                        <div class="dropdown account-btn">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                Tài khoản
+                            </button>
+                            <ul class="dropdown-menu account-menu">
+                                <li><a class="dropdown-item" href="account.jsp">Trang quản lý tài khoản</a></li>
+                                <li><a class="dropdown-item" href="orders.jsp">Đơn đặt của tôi</a></li>
+                                <li><a class="dropdown-item" href="LogOut">Đăng xuất</a></li>
+                            </ul>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <button class="btn btn-outline-primary me-2" type="button" data-bs-toggle="modal"
+                                data-bs-target="#loginModal">Đăng nhập</button>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#registerModal" id="registerBtn"
+                                style="padding: 8px 22px; color: white">Đăng ký</button>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
         </header>
 
@@ -147,7 +146,6 @@
             </script>
         </c:if>
 
-
         <!-- Login section modal -->
         <div class="modal fade login-modal" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
              aria-hidden="true" >
@@ -183,5 +181,9 @@
                 modal.show();
             </script>
         </c:if>
+
+        <!-- Bootstrap 5 JS Bundle (có cả Popper.js) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     </body>
 </html>

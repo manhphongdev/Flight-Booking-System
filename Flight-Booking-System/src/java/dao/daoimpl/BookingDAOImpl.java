@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IBookingDAO;
+import dao.interfaces.IBookingDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

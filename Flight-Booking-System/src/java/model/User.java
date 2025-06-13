@@ -33,8 +33,6 @@ public class User {
         this.status = status;
     }
 
-    
-
     public User(String email, String password, String firstName, String lastName, String userRole) {
         this.email = email;
         this.password = password;

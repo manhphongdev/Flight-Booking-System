@@ -1,7 +1,7 @@
 package service.serviceimpl;
 
-import dao.IPermissionDAO;
-import dao.IRoleDAO;
+import dao.interfaces.IPermissionDAO;
+import dao.interfaces.IRoleDAO;
 import dao.daoimpl.PermissionDAOImpl;
 import dao.daoimpl.RoleDAOImpl;
 import java.util.List;

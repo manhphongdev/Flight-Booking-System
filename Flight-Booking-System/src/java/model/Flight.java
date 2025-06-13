@@ -1,6 +1,5 @@
 package model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -12,12 +11,31 @@ public class Flight {
 
     private Long flightId;
     private Long airlineId;
-    private BigDecimal economyPrice;
-    private BigDecimal businessPrice;
+    private Double economyPrice;
+    private Double businessPrice;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Getters and Setters
+    public Flight() {
+    }
+
+    public Flight(Long airlineId, Double economyPrice, Double businessPrice, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.airlineId = airlineId;
+        this.economyPrice = economyPrice;
+        this.businessPrice = businessPrice;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Flight(Long flightId, Long airlineId, Double economyPrice, Double businessPrice, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.flightId = flightId;
+        this.airlineId = airlineId;
+        this.economyPrice = economyPrice;
+        this.businessPrice = businessPrice;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Long getFlightId() {
         return flightId;
     }
@@ -34,19 +52,19 @@ public class Flight {
         this.airlineId = airlineId;
     }
 
-    public BigDecimal getEconomyPrice() {
+    public Double getEconomyPrice() {
         return economyPrice;
     }
 
-    public void setEconomyPrice(BigDecimal economyPrice) {
+    public void setEconomyPrice(Double economyPrice) {
         this.economyPrice = economyPrice;
     }
 
-    public BigDecimal getBusinessPrice() {
+    public Double getBusinessPrice() {
         return businessPrice;
     }
 
-    public void setBusinessPrice(BigDecimal businessPrice) {
+    public void setBusinessPrice(Double businessPrice) {
         this.businessPrice = businessPrice;
     }
 
@@ -65,4 +83,10 @@ public class Flight {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "Flight{" + "flightId=" + flightId + ", airlineId=" + airlineId + ", economyPrice=" + economyPrice + ", businessPrice=" + businessPrice + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
+   
 }

@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IAirlineDAO;
+import dao.interfaces.IAirlineDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,8 +118,33 @@ public class AirlineDAOImpl implements IAirlineDAO {
         return airlines;
     }
 
-    public static void main(String[] args) {
-        AirlineDAOImpl dao = new AirlineDAOImpl();
-        dao.insert(new Airline( "AB", "ABC", LocalDateTime.now()));
+    @Override
+    public String getAirlineNameByAirlineId(Long id) {
+        String sql = "Select airline_name from Airline where airline_id = ?";
+        try(Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareCall(sql)) {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getString("airline_name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Long getIdByAirlineName(String airlineName) {
+         String sql = "Select airline_id from Airline where airline_name = ?";
+        try(Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareCall(sql)) {
+            ps.setString(1, airlineName);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getLong("airline_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

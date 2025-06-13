@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IFlightSegmentDAO;
+import dao.interfaces.IFlightSegmentDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,21 +16,20 @@ import model.FlightSegment;
 import utils.DBContext;
 
 /**
- * 
+ *
  * @author Administrator
  * @version 1.0
  */
 public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
-    
+
     private static final Logger logger = Logger.getLogger(FlightSegmentDAOImpl.class.getName());
 
     @Override
     public Optional<FlightSegment> findByID(Long id) {
         String sql = "SELECT * FROM [FlightSegment] WHERE segment_id = ?";
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -47,10 +46,9 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
     public List<FlightSegment> findAll() {
         List<FlightSegment> segments = new ArrayList<>();
         String sql = "SELECT * FROM [FlightSegment]";
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     segments.add(flightSegmentMapper(rs));
@@ -66,18 +64,15 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
     public Long insert(FlightSegment segment) {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO [FlightSegment] (flight_id, departure_airport, arrival_airport, ");
-        sql.append("departure_time, arrival_time, created_at) VALUES (?, ?, ?, ?, ?, ?)");
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS)) {
-            
+        sql.append(" created_at) VALUES (?, ?, ?, ?)");
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS)) {
+
             ps.setLong(1, segment.getFlightId());
             ps.setString(2, segment.getDepartureAirport());
             ps.setString(3, segment.getArrivalAirport());
-            ps.setTimestamp(4, Timestamp.valueOf(segment.getDepartureTime()));
-            ps.setTimestamp(5, Timestamp.valueOf(segment.getArrivalTime()));
-            ps.setTimestamp(6, Timestamp.valueOf(segment.getCreatedAt()));
-            
+            ps.setTimestamp(4, Timestamp.valueOf(segment.getCreatedAt()));
+
             if (ps.executeUpdate() == 1) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -95,19 +90,15 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
     @Override
     public boolean updateByID(Long id, FlightSegment segment) {
         StringBuilder sql = new StringBuilder();
-        sql.append("UPDATE [FlightSegment] SET flight_id = ?, departure_airport = ?, arrival_airport = ?, ");
-        sql.append("departure_time = ?, arrival_time = ? WHERE segment_id = ?");
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-            
+        sql.append("UPDATE [FlightSegment] SET flight_id = ?, departure_airport = ?, arrival_airport = ? ");
+        sql.append(" WHERE segment_id = ?");
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
             ps.setLong(1, segment.getFlightId());
             ps.setString(2, segment.getDepartureAirport());
             ps.setString(3, segment.getArrivalAirport());
-            ps.setTimestamp(4, Timestamp.valueOf(segment.getDepartureTime()));
-            ps.setTimestamp(5, Timestamp.valueOf(segment.getArrivalTime()));
-            ps.setLong(6, id);
-            
+            ps.setLong(4, segment.getSegmentId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error updating flight segment: {0}", e.getMessage());
@@ -118,10 +109,9 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
     @Override
     public boolean deleteByID(Long id) {
         String sql = "DELETE FROM [FlightSegment] WHERE segment_id = ?";
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setLong(1, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -139,10 +129,9 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
     public List<FlightSegment> findByFlightId(Long flightId) {
         List<FlightSegment> segments = new ArrayList<>();
         String sql = "SELECT * FROM [FlightSegment] WHERE flight_id = ?";
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setLong(1, flightId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -159,10 +148,9 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
     public List<FlightSegment> findByAirport(String airportCode) {
         List<FlightSegment> segments = new ArrayList<>();
         String sql = "SELECT * FROM [FlightSegment] WHERE departure_airport = ? OR arrival_airport = ?";
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, airportCode);
             ps.setString(2, airportCode);
             try (ResultSet rs = ps.executeQuery()) {
@@ -180,10 +168,9 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
     public List<FlightSegment> findByTimeRange(LocalDateTime startTime, LocalDateTime endTime) {
         List<FlightSegment> segments = new ArrayList<>();
         String sql = "SELECT * FROM [FlightSegment] WHERE departure_time BETWEEN ? AND ? OR arrival_time BETWEEN ? AND ?";
-        
-        try (Connection conn = DBContext.getConn();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setTimestamp(1, Timestamp.valueOf(startTime));
             ps.setTimestamp(2, Timestamp.valueOf(endTime));
             ps.setTimestamp(3, Timestamp.valueOf(startTime));
@@ -205,9 +192,25 @@ public class FlightSegmentDAOImpl implements IFlightSegmentDAO {
         segment.setFlightId(rs.getLong("flight_id"));
         segment.setDepartureAirport(rs.getString("departure_airport"));
         segment.setArrivalAirport(rs.getString("arrival_airport"));
-        segment.setDepartureTime(rs.getTimestamp("departure_time").toLocalDateTime());
-        segment.setArrivalTime(rs.getTimestamp("arrival_time").toLocalDateTime());
         segment.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         return segment;
     }
-} 
+
+    @Override
+    public FlightSegment findByDepartureAirportAndArrvalAirport(String departure, String arrival) {
+        String sql = "select * from FlightSegment where departure_airport = ? and arrival_airport = ?";
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, departure);
+            ps.setString(2, arrival);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return flightSegmentMapper(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+
+}

@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IPaymentDAO;
+import dao.interfaces.IPaymentDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

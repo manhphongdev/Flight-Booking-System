@@ -302,6 +302,9 @@
                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal-${user.userId}">
                                             <i class="bi bi-pencil"></i> Edit
                                         </button>
+                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#updateCredentialsModal-${user.userId}">
+                                            <i class="bi bi-key"></i> Update Credentials
+                                        </button>
                                         <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal-${user.userId}">
                                             <i class="bi bi-trash"></i> Delete
                                         </button>
@@ -386,6 +389,38 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- Update Credentials Modal -->
+                                        <div class="modal fade" id="updateCredentialsModal-${user.userId}" tabindex="-1" aria-labelledby="updateCredentialsModalLabel-${user.userId}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="updateCredentialsModalLabel-${user.userId}">Update Credentials</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="${pageContext.request.contextPath}/admin/users" method="POST">
+                                                            <input type="hidden" name="action" value="updateCredentials">
+                                                            <input type="hidden" name="userIdEdit" value="${user.userId}">
+                                                            <c:if test="${not empty errorCredentials}">
+                                                                <div class="alert alert-danger">${errorCredentials}</div>
+                                                            </c:if>
+                                                            <div class="mb-3">
+                                                                <label for="editEmail-${user.userId}" class="form-label">Email</label>
+                                                                <input type="email" class="form-control" id="editEmail-${user.userId}" name="newEmail" value="${user.email}" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="editPassword-${user.userId}" class="form-label">New Password</label>
+                                                                <input type="password" class="form-control" id="editPassword-${user.userId}" name="newPassword">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="confirmPassword-${user.userId}" class="form-label">Confirm Password</label>
+                                                                <input type="password" class="form-control" id="confirmPassword-${user.userId}" name="confirmPassword">
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Update Credentials</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                     </td>
                                 </tr>
@@ -395,6 +430,8 @@
                 </div>
 
             </div>
+
+
 
             <!-- Add User Modal -->
             <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">

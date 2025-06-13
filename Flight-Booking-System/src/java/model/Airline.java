@@ -18,7 +18,7 @@ public class Airline {
     public Airline() {
     }
 
-    public Airline( String airlineName,String airlineCode, LocalDateTime createAt) {
+    public Airline(String airlineName, String airlineCode, LocalDateTime createAt) {
         this.airlineCode = airlineCode;
         this.airlineName = airlineName;
         this.createAt = createAt;

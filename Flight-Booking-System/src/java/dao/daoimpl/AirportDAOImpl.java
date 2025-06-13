@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao.daoimpl;
 
-import dao.IAirportDAO;
+import dao.interfaces.IAirportDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +16,7 @@ import model.Airport;
 import utils.DBContext;
 
 /**
- * 
+ *
  * @author Administrator
  * @version 1.0
  */
@@ -29,15 +25,15 @@ public class AirportDAOImpl implements IAirportDAO {
     private static final Logger LOG = Logger.getLogger(AirportDAOImpl.class.getName());
 
     private Airport airportMapper(ResultSet rs) throws SQLException {
-    return new Airport(
-        rs.getString("airport_code"),
-        rs.getString("airport_name"),
-        rs.getString("city"),
-        rs.getString("country"),
-        rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null,
-        rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime() : null    
-    );
-}
+        return new Airport(
+                rs.getString("airport_code"),
+                rs.getString("airport_name"),
+                rs.getString("city"),
+                rs.getString("country"),
+                rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null,
+                rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime() : null
+        );
+    }
 
     @Override
     public List<Airport> findAll() {
@@ -96,7 +92,7 @@ public class AirportDAOImpl implements IAirportDAO {
     }
 
     @Override
-    public boolean updateByCode( Airport entity) {
+    public boolean updateByCode(Airport entity) {
         StringBuilder sb = new StringBuilder();
         sb.append("update [Airport] set airport_name = ?, city = ?, country = ?, updated_at = ? ");
         sb.append("where airport_code = ?");
@@ -133,4 +129,28 @@ public class AirportDAOImpl implements IAirportDAO {
         return false;
     }
 
+    @Override
+    public List<String> findAirportSuggestions(String keyword) {
+        String sql = "Select top 5 airport_name from [Airport] where city like ? or airport_name like ? ";
+        List<String> suggestions = new ArrayList<>();
+        try (Connection conn = DBContext.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                suggestions.add(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return suggestions;
+    }
+
+    public static void main(String[] args) {
+        AirportDAOImpl dao = new AirportDAOImpl();
+        List<String> suggestions = dao.findAirportSuggestions("hánh Hoà");
+        for (String suggestion : suggestions) {
+            System.out.println(suggestion);
+        }
+    }
 }

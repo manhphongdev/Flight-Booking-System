@@ -37,7 +37,7 @@
             </h2>
             <div id="flightCollapse" class="accordion-collapse collapse ${activePage == 'flights' || activePage == 'flight-schedule' || activePage == 'seats' || activePage == 'booking' || activePage == 'booking-seats' || activePage == 'passenger' || activePage == 'airlines' || activePage == 'airport' ? 'show' : ''}" data-bs-parent="#sidebarAccordion">
                 <div class="accordion-body p-0">
-                    <a href="/flights/admin/flights" class="${activePage == 'flights' ? 'active' : ''}"><i class="bi bi-airplane-fill me-2"></i> Flights</a>
+                    <a href="${pageContext.request.contextPath}/flightmanager/flights" class="${activePage == 'flights' ? 'active' : ''}"><i class="bi bi-airplane-fill me-2"></i> Flights</a>
                     <a href="/flights/admin/flight-schedule" class="${activePage == 'flight-schedule' ? 'active' : ''}"><i class="bi bi-calendar me-2"></i> Flight Schedule</a>
                     <a href="/flights/admin/seats" class="${activePage == 'seats' ? 'active' : ''}"><i class="bi bi-grid me-2"></i> Seats</a>
                     <a href="/flights/admin/booking" class="${activePage == 'booking' ? 'active' : ''}"><i class="bi bi-ticket me-2"></i> Booking</a>
@@ -56,7 +56,7 @@
             </h2>
             <div id="financeCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
                 <div class="accordion-body p-0">
-                    <a href="admin_coupons.jsp" class="${activePage == 'coupons' ? 'active' : ''}"><i class="bi bi-ticket-perforated me-2"></i> Coupons</a>
+                    <a href="${pageContext.request.contextPath}/bookingmanager/coupon" class="${activePage == 'coupons' ? 'active' : ''}"><i class="bi bi-ticket-perforated me-2"></i> Coupons</a>
                     <a href="admin_payments.jsp" class="${activePage == 'payments' ? 'active' : ''}"><i class="bi bi-currency-dollar me-2"></i> Payments</a>
                     <a href="admin_logs.jsp" class="${activePage == 'logs' ? 'active' : ''}"><i class="bi bi-journal-text me-2"></i> Logs</a>
                 </div>

@@ -12,7 +12,6 @@ import java.util.List;
  * @author manhphong
  */
 public interface IBaseService<T> {
-    
     boolean save(T entity);
     T getByID(Long id);
     T getByName(String name);

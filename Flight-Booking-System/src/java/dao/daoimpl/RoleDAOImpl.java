@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IRoleDAO;
+import dao.interfaces.IRoleDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

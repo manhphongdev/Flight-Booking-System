@@ -1,15 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package service.serviceimpl;
 
-import dao.IAirportDAO;
+import dao.interfaces.IAirportDAO;
 import dao.daoimpl.AirportDAOImpl;
 import exception.EntityExistExeption;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import model.Airport;
 import service.interfaces.IAirportService;
 
@@ -66,5 +64,26 @@ public class AirportServiceImpl implements IAirportService {
         }
         return isDeleted;
     }
-
+    
+    @Override
+    public List<String> getKeyAirportForSearch(){
+        return getAll().stream()
+                .map(airport -> airport.getAirportCode() + " - " + airport.getAirportName() + " - " + airport.getCity())
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<String> getAirportSuggesstions(String keyword){
+        return airportDAO.findAirportSuggestions(keyword);
+    }
+    
+    public static void main(String[] args) {
+        AirportServiceImpl s = new AirportServiceImpl();
+        
+        List<String> lists = s.getKeyAirportForSearch();
+        
+        for (String list : lists) {
+            System.out.println(list);
+        }
+    }
 }

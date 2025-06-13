@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IUserDAO;
+import dao.interfaces.IUserDAO;
 import enums.UserStatus;
 import java.sql.*;
 import java.time.LocalDateTime;

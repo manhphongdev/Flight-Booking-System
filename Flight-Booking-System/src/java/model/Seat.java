@@ -16,6 +16,8 @@ public class Seat {
     private String status;
     private LocalDateTime createdAt;
 
+    
+    
     // Getters and Setters
     public Long getSeatId() {
         return seatId;

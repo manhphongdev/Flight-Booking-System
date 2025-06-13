@@ -1,10 +1,12 @@
 package service.serviceimpl;
 
 import config.email.EmailConfig;
-import dao.IEmailAuthenticationDAO;
-import dao.IUserDAO;
+import dao.interfaces.IEmailAuthenticationDAO;
+import dao.interfaces.IUserDAO;
 import dao.daoimpl.EmailAuthenticationDAOImpl;
+import dao.daoimpl.RoleDAOImpl;
 import dao.daoimpl.UserDAOImpl;
+import dao.interfaces.IRoleDAO;
 import enums.UserStatus;
 import exception.EntityExistExeption;
 import exception.EntityNotFoundException;
@@ -29,7 +31,8 @@ public class UserServiceImpl implements IUserService {
     private final IUserDAO uDao;
     private final IEmailAuthenticationDAO verifyDAO;
     private static final Logger LOG = Logger.getLogger(UserServiceImpl.class.getName());
-
+    private final IRoleDAO rDao =new RoleDAOImpl();
+    
     public UserServiceImpl() {
         this.uDao = new UserDAOImpl();
         this.verifyDAO = new EmailAuthenticationDAOImpl();
@@ -142,7 +145,11 @@ public class UserServiceImpl implements IUserService {
         User user = getUserById(newUser.getUserId());
         user.setFirstName(newUser.getFirstName());
         user.setLastName(newUser.getLastName());
+        
         user.setUserRole(newUser.getUserRole());
+        if(getUserRole(user) ==null){
+            uDao.addUserHasRole(user);
+        }
         user.setStatus(newUser.getStatus());
 
         uDao.updateByID(user.getUserId(), user);
@@ -225,4 +232,5 @@ public class UserServiceImpl implements IUserService {
         );
         return users;
     }
+    
 }

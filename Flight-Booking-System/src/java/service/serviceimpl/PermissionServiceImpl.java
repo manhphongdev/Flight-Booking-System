@@ -1,6 +1,6 @@
 package service.serviceimpl;
 
-import dao.IPermissionDAO;
+import dao.interfaces.IPermissionDAO;
 import dao.daoimpl.PermissionDAOImpl;
 import java.util.List;
 import java.util.Optional;

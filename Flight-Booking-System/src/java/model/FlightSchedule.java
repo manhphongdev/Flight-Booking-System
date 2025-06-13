@@ -19,6 +19,11 @@ public class FlightSchedule {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public FlightSchedule() {
+    }
+
+    
+    
     // Getters and Setters
     public Long getScheduleId() {
         return scheduleId;
@@ -91,4 +96,10 @@ public class FlightSchedule {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "FlightSchedule{" + "scheduleId=" + scheduleId + ", flightId=" + flightId + ", flightNumber=" + flightNumber + ", departureTime=" + departureTime + ", arrivalTime=" + arrivalTime + ", duration=" + duration + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
+    
 }

@@ -42,35 +42,35 @@ public class UserManagementServlet extends HttpServlet {
         String role = req.getParameter("roleFilter");
         String sortBy = req.getParameter("sortBy");
 
-        if (null != sortBy) switch (sortBy) {
-            case "fullNameASC" -> {
-                if (role.equals("allRole")) {
-                    users = uService.searchByNameASC(key);
-                } else {
-                    users = uService.searchByNameAndRoleAndOrderByNameASC(key, role);
+        if (null != sortBy) {
+            switch (sortBy) {
+                case "fullNameASC" -> {
+                    if (role.equals("allRole")) {
+                        users = uService.searchByNameASC(key);
+                    } else {
+                        users = uService.searchByNameAndRoleAndOrderByNameASC(key, role);
+                    }
                 }
-            }
-            case "fullNameDESC" -> {
-                if (role.equals("allRole")) {
-                    users = uService.searchByNameDESC(key);
-                } else {
-                    users = uService.searchByNameAndRoleAndOrderByNameDESC(key, role);
+                case "fullNameDESC" -> {
+                    if (role.equals("allRole")) {
+                        users = uService.searchByNameDESC(key);
+                    } else {
+                        users = uService.searchByNameAndRoleAndOrderByNameDESC(key, role);
+                    }
                 }
-            }
-            case "emailASC" -> {
-                if(role.equals("allRole")){
-                    users = uService.searchByEmailASC(key);
+                case "emailASC" -> {
+                    if (role.equals("allRole")) {
+                        users = uService.searchByEmailASC(key);
+                    } else {
+                        users = uService.searchByEmailAndRoleAndOrderByNameASC(key, role);
+                    }
                 }
-                else{
-                    users = uService.searchByEmailAndRoleAndOrderByNameASC(key, role);
-                }
-            }
-            case "emailDESC" -> {
-                if(role.equals("allRole")){
-                    users = uService.searchByEmailDESC(key);
-                }
-                else{
-                    users = uService.searchByEmailAndRoleAndOrderByNameDESC(key, role);
+                case "emailDESC" -> {
+                    if (role.equals("allRole")) {
+                        users = uService.searchByEmailDESC(key);
+                    } else {
+                        users = uService.searchByEmailAndRoleAndOrderByNameDESC(key, role);
+                    }
                 }
             }
         }
@@ -164,10 +164,14 @@ public class UserManagementServlet extends HttpServlet {
         newUser.setUserId(userId);
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
+        LOG.info("beforeUpdate: " + roleName);
         newUser.setUserRole(roleName);
+        LOG.info("afterSetRole: " + newUser.getUserRole());
         newUser.setStatus(UserStatus.valueOf(status.toUpperCase()));
 
         uService.adminUpdateUser(newUser);
+        LOG.info("afterUpdate: " + newUser.getUserRole());
+
     }
 
 }

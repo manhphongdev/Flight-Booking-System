@@ -1,6 +1,6 @@
 package dao.daoimpl;
 
-import dao.IPermissionDAO;
+import dao.interfaces.IPermissionDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

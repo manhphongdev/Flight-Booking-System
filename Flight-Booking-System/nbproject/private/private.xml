@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/controller/admin/dashboard/AirlineManagement.java</file>
-            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/dao/daoimpl/AirlineDAOImpl.java</file>
-            <file>file:/D:/S4/PRJ301/Flight-Booking-System/web/views/admin/user-management.jsp</file>
-            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/model/Airline.java</file>
-            <file>file:/D:/S4/PRJ301/Flight-Booking-System/web/views/admin/airline_dashboard.jsp</file>
-            <file>file:/D:/S4/PRJ301/Flight-Booking-System/web/views/admin/sidebar.jsp</file>
+            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/controller/customer/FlightSearchResultServlet.java</file>
+            <file>file:/D:/S4/PRJ301/Flight-Booking-System/web/views/customer/booking-search-result.jsp</file>
+            <file>file:/D:/S4/PRJ301/Flight-Booking-System/web/views/customer/booking.jsp</file>
+            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/dao/daoimpl/FlightDAOImpl.java</file>
+            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/controller/customer/FlightSearchServlet.java</file>
+            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/controller/customer/BookingServlet.java</file>
+            <file>file:/D:/S4/PRJ301/Flight-Booking-System/src/java/dto/FlightSearchDTO.java</file>
         </group>
     </open-files>
 </project-private>
